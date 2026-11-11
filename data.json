@@ -1,574 +1,316 @@
 {
-  "version": "1.0.0",
-  "lastUpdated": "2026-11-11",
   "profiles": [
     {
-      "id": "attack-x-dominance",
-      "name": "Attack / X-Dominance & 8-Meter Power",
-      "position": "Attack",
-      "focus": "13yo Elite Club Attack — X-Dodging, Crease Finishing, Off-Hand Quickness & Knee-Safe Explosiveness",
-      "dailyCapMins": 45,
-      "days": [
+      "id": "attack-x",
+      "name": "Attack / X-Dominance & 8M Power",
+      "athlete": "Marlene",
+      "targetCapMins": 45,
+      "schedule": [
         {
-          "id": "mon",
-          "name": "Monday",
-          "dailyFocus": "X-Dodging & Crease Finishing",
+          "day": "Monday",
+          "title": "X-Dominance & First-Step Explosiveness",
+          "focus": "X-Dodging & Crease Finishing",
+          "badge": "High Intensity",
           "isLowImpact": false,
-          "notes": "Full explosive load. Focus on low-center-of-gravity roll dodges and quick-stick crease finishes.",
           "phases": [
             {
               "phaseNumber": 1,
-              "name": "Phase 1: Knee-Care Warm-Up & Mobility",
+              "title": "Kneeling Couch Stretch & Dynamic Warm-Up",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Dynamic Leg Swings",
-                  "duration": 3,
-                  "reps": "2 x 10 / leg",
-                  "rest": "15s",
-                  "cues": "Front-to-back and lateral swings. Open hip flexors smoothly without forcing range."
-                },
-                {
-                  "title": "Kneeling Quad Stretch (Band/Wall)",
-                  "duration": 3,
-                  "reps": "2 x 45s / leg",
-                  "rest": "15s",
-                  "cues": "Keep glutes squeezed and ribs down to gently lengthen quadriceps and patellar tendon."
-                },
-                {
-                  "title": "Low-Impact A-Skips",
-                  "duration": 2,
-                  "reps": "2 x 15 yds",
-                  "rest": "20s",
-                  "cues": "Soft, quiet forefoot landings with braced core and knee tracking over second toe."
-                }
+                {"title": "Kneeling Couch Stretch", "reps": "30s / leg", "rest": "0s", "cues": "Gently lengthens quads and patellar tendon."},
+                {"title": "Dynamic Leg Swings (Fwd/Back & Lat)", "reps": "15 reps", "rest": "0s", "cues": "Open hip flexors smoothly."},
+                {"title": "Banded Ankle Mobilizations & Calf Pumps", "reps": "10 reps / ankle", "rest": "0s", "cues": "Ensure shock absorption up kinetic chain."}
               ]
             },
             {
               "phaseNumber": 2,
-              "name": "Phase 2: Joint-Safe Plyometrics",
+              "title": "Joint-Safe Plyometrics",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Broad Jumps to Stick Landing",
-                  "duration": 4,
-                  "reps": "3 x 5 reps",
-                  "rest": "30s rest",
-                  "cues": "Land softly with hips back and knees bent over toes; zero inward knee valgus."
-                },
-                {
-                  "title": "Lateral Line Hops / Skater Steps",
-                  "duration": 4,
-                  "reps": "3 x 20s",
-                  "rest": "30s rest",
-                  "cues": "Side-to-side boundary bounding with controlled deceleration on each plant."
-                }
+                {"title": "Low-Impact Deceleration Drops", "reps": "3 sets x 5 reps", "rest": "45s", "cues": "6-inch low box, absorb softly through hips."},
+                {"title": "Broad Jump to Stick Landing", "reps": "3 sets x 5 reps", "rest": "60s", "cues": "Silent, soft landing with bent knees over toes."}
               ]
             },
             {
               "phaseNumber": 3,
-              "name": "Phase 3: Stick Work & Shooting",
+              "title": "Stick Work & 8M Power Shooting",
+              "durationMins": 23,
               "drills": [
-                {
-                  "title": "X-Roll Dodge Execution",
-                  "duration": 8,
-                  "reps": "10 dom / 10 off-hand",
-                  "rest": "Continuous",
-                  "cues": "Dummy at X. Parent feeds from high slot; tight roll dodge keeping stick protected and low-corner shot."
-                },
-                {
-                  "title": "Crease Quick-Stick Finish",
-                  "duration": 7,
-                  "reps": "15 total reps",
-                  "rest": "20s / 5 reps",
-                  "cues": "Parent feeds from wing/X. Soft hands, zero cradle, quick-release bounce shot around crease dummy."
-                },
-                {
-                  "title": "Pick-and-Roll Separation",
-                  "duration": 7,
-                  "reps": "10 clean reps",
-                  "rest": "20s",
-                  "cues": "Dummy screen at wing, parent trails. Brush shoulder-to-shoulder off screen and explode inside."
-                }
+                {"title": "8M Step-Down Power Driving", "reps": "24 reps (12R / 12L)", "rest": "30s", "cues": "Off X feeds, full hip rotation."},
+                {"title": "Dodging Dummies & Roll-Offs at X", "reps": "20 reps / side", "rest": "45s", "cues": "Dodge, seal, roll tight to pipe."},
+                {"title": "Off-Hand High-Corner Finishing", "reps": "25 reps", "rest": "30s", "cues": "From weak wing, high-to-low release."}
               ]
             },
             {
               "phaseNumber": 4,
-              "name": "Phase 4: Cool-Down & Tactical IQ",
+              "title": "Extended Knee-Care Cool-Down",
+              "durationMins": 6,
               "drills": [
-                {
-                  "title": "Slide Package Read & Quad Flush",
-                  "duration": 7,
-                  "reps": "7 mins",
-                  "rest": "None",
-                  "cues": "Light walking quad/hamstring flush while visualizing early crease slide from X and skip pass to weak-side wing."
-                }
+                {"title": "Standing Quad Static Hold", "reps": "45s - 60s hold", "rest": "0s", "cues": "Deep lengthening of quadriceps."},
+                {"title": "Figure-4 Glute Stretch", "reps": "45s - 60s hold", "rest": "0s", "cues": "Release hip tension."}
               ]
             }
           ]
         },
         {
-          "id": "tue",
-          "name": "Tuesday",
-          "dailyFocus": "Low-Impact Pick Mechanics & Wing Shooting",
+          "day": "Tuesday",
+          "title": "Low-Impact Power & Volume Shooting",
+          "focus": "Basketball Integration & Pick Mechanics",
+          "badge": "Basketball Night",
           "isLowImpact": true,
-          "notes": "Basketball Night: Phase 2 plyometrics zeroed out to protect knees and prevent lower-limb overload.",
           "phases": [
             {
               "phaseNumber": 1,
-              "name": "Phase 1: Knee-Care Warm-Up & Mobility",
+              "title": "Tissue Prep Warm-Up",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Hurdle Trail-Leg Extensions",
-                  "duration": 3,
-                  "reps": "2 x 8 / leg",
-                  "rest": "15s",
-                  "cues": "Controlled hip circumduction to unlock hip/quad range of motion."
-                },
-                {
-                  "title": "Standing PNF Quad Stretch",
-                  "duration": 3,
-                  "reps": "2 x 30s / leg",
-                  "rest": "15s",
-                  "cues": "5-second gentle isometric press into hand followed by relaxed quad lengthening."
-                },
-                {
-                  "title": "Single-Leg Glute Bridges",
-                  "duration": 2,
-                  "reps": "2 x 10 / leg",
-                  "rest": "15s",
-                  "cues": "Drive through heel to activate posterior chain and unload quadriceps."
-                }
+                {"title": "Foam Roll Quads & Calves", "reps": "3 mins", "rest": "0s", "cues": "Relieve tissue tightness prior to practice."},
+                {"title": "Walking Lunges & Hip Rotations", "reps": "5 mins", "rest": "0s", "cues": "Active mobility without joint overload."}
               ]
             },
             {
               "phaseNumber": 2,
-              "name": "Phase 2: Joint-Safe Plyometrics",
-              "drills": []
+              "title": "Joint-Safe Plyometrics (Skipped)",
+              "durationMins": 0,
+              "drills": [
+                {"title": "Plyometrics skipped to preserve joints for basketball practice.", "reps": "0 reps", "rest": "0s", "cues": "Active rest for lower extremities."}
+              ]
             },
             {
               "phaseNumber": 3,
-              "name": "Phase 3: Stick Work & Shooting",
+              "title": "Low-Impact Stick Work & 8M Power Arc",
+              "durationMins": 29,
               "drills": [
-                {
-                  "title": "Pick-and-Pop Partner Passing",
-                  "duration": 10,
-                  "reps": "15 right / 15 left",
-                  "rest": "Continuous",
-                  "cues": "Set blind screen on dummy, pop to open window with stick high, catch under light pad pressure."
-                },
-                {
-                  "title": "Wing Drive & 8M Step-Down Shooting",
-                  "duration": 12,
-                  "reps": "12 reps",
-                  "rest": "20s",
-                  "cues": "Sweep hard across top from wing cone, protect stick across frame, plant and rip low-to-low."
-                }
+                {"title": "Stationary 8M Power Drives", "reps": "30 reps", "rest": "45s", "cues": "Max rotation into top corners."},
+                {"title": "Wall Ball / Rebounder Cradling", "reps": "125R / 125L", "rest": "30s", "cues": "Quick stick protection and soft hands."},
+                {"title": "Wing Catch & Shoot", "reps": "30 reps", "rest": "45s", "cues": "On the run off X feed."}
               ]
             },
             {
               "phaseNumber": 4,
-              "name": "Phase 4: Cool-Down & Tactical IQ",
+              "title": "Deep Static Cool-Down",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Pick-and-Roll Reads & Calf Decompression",
-                  "duration": 8,
-                  "reps": "8 mins",
-                  "rest": "None",
-                  "cues": "Gentle calf/hip flexor stretch while reviewing over/under screen reads (translates directly to evening basketball)."
-                }
+                {"title": "Quads, Hip Flexors, & Calves Static Holds", "reps": "60s hold each", "rest": "0s", "cues": "Complete lower-body flush."}
               ]
             }
           ]
         },
         {
-          "id": "wed",
-          "name": "Wednesday",
-          "dailyFocus": "Wing Dodging & Mid-Range Finishing",
+          "day": "Wednesday",
+          "title": "Wing Play & Pick-and-Roll Mastery",
+          "focus": "Wing Dodging & Mid-Range Shooting",
+          "badge": "High Intensity",
           "isLowImpact": false,
-          "notes": "Focus on sharp jab-step deception and high-wing roll-outs.",
           "phases": [
             {
               "phaseNumber": 1,
-              "name": "Phase 1: Knee-Care Warm-Up & Mobility",
+              "title": "Knee-Care Warm-Up",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Dynamic Frankenstein Walks",
-                  "duration": 3,
-                  "reps": "2 x 15 yds",
-                  "rest": "15s",
-                  "cues": "Keep torso tall; alternate straight-leg kicks to warm hamstrings dynamically."
-                },
-                {
-                  "title": "Couch Stretch / Deep Hip Flexor",
-                  "duration": 3,
-                  "reps": "2 x 45s / leg",
-                  "rest": "15s",
-                  "cues": "Rear foot elevated on bench/wall; tuck pelvis under for deep quad release."
-                },
-                {
-                  "title": "Lateral Mini-Band Shuffles",
-                  "duration": 2,
-                  "reps": "2 x 12 yds",
-                  "rest": "15s",
-                  "cues": "Athletic quarter-squat stance; fire glute medius to stabilize knee alignment."
-                }
+                {"title": "Kneeling Lunges & Lateral Band Walks", "reps": "12 yards", "rest": "0s", "cues": "Activate glute medius and hip stabilizers."},
+                {"title": "Calf Raises", "reps": "20 reps", "rest": "0s", "cues": "Controlled tendon loading."}
               ]
             },
             {
               "phaseNumber": 2,
-              "name": "Phase 2: Joint-Safe Plyometrics",
+              "title": "Joint-Safe Plyometrics",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Skater Jumps + 2s Stick Landing",
-                  "duration": 4,
-                  "reps": "3 x 6 / side",
-                  "rest": "30s rest",
-                  "cues": "Bound laterally and freeze for 2 full seconds on a stable, braced knee."
-                },
-                {
-                  "title": "Drop Steps to 5-Yard Acceleration",
-                  "duration": 4,
-                  "reps": "3 x 5 reps",
-                  "rest": "30s rest",
-                  "cues": "Open hips rapidly and drive arms for an explosive first three steps away from dummy."
-                }
+                {"title": "Lateral Skaters", "reps": "3 sets x 6 reps/side", "rest": "45s", "cues": "Soft, wide lateral bounds."},
+                {"title": "Rotational Deceleration Cuts", "reps": "3 sets x 5 reps/side", "rest": "45s", "cues": "90-degree plant and drop."}
               ]
             },
             {
               "phaseNumber": 3,
-              "name": "Phase 3: Stick Work & Shooting",
+              "title": "Stick Work & 8M Power Sweep",
+              "durationMins": 23,
               "drills": [
-                {
-                  "title": "Rocker & Split Dodge Series",
-                  "duration": 10,
-                  "reps": "8 right / 8 left",
-                  "rest": "20s",
-                  "cues": "Dummy at top-left wing. Hard jab step one direction, crisp split cradle, finish on the run."
-                },
-                {
-                  "title": "High-Wing Roll-Out Shooting",
-                  "duration": 11,
-                  "reps": "16 total reps",
-                  "rest": "20s",
-                  "cues": "Catch on wing from X feed, drive alley, roll away from dummy, change plane high-to-low."
-                }
+                {"title": "8M Sweeping Power Dodge", "reps": "20 reps (10R / 10L)", "rest": "45s", "cues": "Across fan with explosive first step."},
+                {"title": "Working Off Picks (W/ Parent)", "reps": "18 reps", "rest": "45s", "cues": "Set pick, curl, quick finish."},
+                {"title": "Off-Hand Wing Dodges", "reps": "20 reps", "rest": "30s", "cues": "Alley drives and step-away shots."}
               ]
             },
             {
               "phaseNumber": 4,
-              "name": "Phase 4: Cool-Down & Tactical IQ",
+              "title": "Extended Knee-Care Cool-Down",
+              "durationMins": 6,
               "drills": [
-                {
-                  "title": "Fast-Break Spacing & Hamstring Stretch",
-                  "duration": 8,
-                  "reps": "8 mins",
-                  "rest": "None",
-                  "cues": "Seated hamstring/adductor stretch while reviewing when to hold behind X for trailing attack."
-                }
+                {"title": "Runner's Lunges & Quad Foam Stretching", "reps": "45s hold", "rest": "0s", "cues": "Release hip flexor tightness."}
               ]
             }
           ]
         },
         {
-          "id": "thu",
-          "name": "Thursday",
-          "dailyFocus": "Low-Impact Off-Ball Cutting & Quick Hands",
+          "day": "Thursday",
+          "title": "Low-Impact Free Position Focus",
+          "focus": "Basketball Integration & Off-Ball IQ",
+          "badge": "Basketball Night",
           "isLowImpact": true,
-          "notes": "Basketball Night: Second low-impact day to protect knee joint health.",
           "phases": [
             {
               "phaseNumber": 1,
-              "name": "Phase 1: Knee-Care Warm-Up & Mobility",
+              "title": "Activation Warm-Up",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Dynamic Lateral Lunges",
-                  "duration": 3,
-                  "reps": "2 x 8 / leg",
-                  "rest": "15s",
-                  "cues": "Sit hips back into heel; keep trailing leg straight for groin and quad mobility."
-                },
-                {
-                  "title": "Supine Quad & IT Band Stretch",
-                  "duration": 3,
-                  "reps": "2 x 45s / leg",
-                  "rest": "15s",
-                  "cues": "Use strap or towel to gently release lateral knee tension."
-                },
-                {
-                  "title": "Banded Clamshells",
-                  "duration": 2,
-                  "reps": "2 x 15 / leg",
-                  "rest": "15s",
-                  "cues": "Keep heels together and pelvis stacked; isolate external hip rotators."
-                }
+                {"title": "Bird-Dogs & Glute Bridges", "reps": "2 sets x 10 reps", "rest": "0s", "cues": "Posterior chain engagement."},
+                {"title": "Dynamic Leg Stretches", "reps": "3 mins", "rest": "0s", "cues": "Maintain loose mobility."}
               ]
             },
             {
               "phaseNumber": 2,
-              "name": "Phase 2: Joint-Safe Plyometrics",
-              "drills": []
+              "title": "Joint-Safe Plyometrics (Skipped)",
+              "durationMins": 0,
+              "drills": [
+                {"title": "Plyometrics skipped to protect knees before basketball practice.", "reps": "0 reps", "rest": "0s", "cues": "Preserve joint integrity."}
+              ]
             },
             {
               "phaseNumber": 3,
-              "name": "Phase 3: Stick Work & Shooting",
+              "title": "Low-Impact Stick Work & 8M Free Position",
+              "durationMins": 29,
               "drills": [
-                {
-                  "title": "Cutter Timing & Catch-and-Shoot",
-                  "duration": 12,
-                  "reps": "20 total reps",
-                  "rest": "20s",
-                  "cues": "V-cut off dummy into 8m arc from X feed; catch and release in under 0.5 seconds."
-                },
-                {
-                  "title": "Off-Hand Rapid Partner Exchange",
-                  "duration": 10,
-                  "reps": "100 clean passes",
-                  "rest": "Continuous",
-                  "cues": "Non-dominant hand quick-stick passing with parent; keep top hand relaxed."
-                }
+                {"title": "8M Free Position Hash Drives", "reps": "28 reps", "rest": "30s", "cues": "Explosive drive off hash."},
+                {"title": "One-Touch Crease Finishing", "reps": "40 reps", "rest": "30s", "cues": "Zero wind-up from 8M feeds."},
+                {"title": "Off-Hand Wall/Rebounder Work", "reps": "150 reps", "rest": "30s", "cues": "High-speed passing and quick hands."}
               ]
             },
             {
               "phaseNumber": 4,
-              "name": "Phase 4: Cool-Down & Tactical IQ",
+              "title": "Extended Knee-Care Cool-Down",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Crease Blind-Spot Read & Figure-4 Stretch",
-                  "duration": 8,
-                  "reps": "8 mins",
-                  "rest": "None",
-                  "cues": "Supine Figure-4 glute stretch while mapping backdoor cuts behind ball-watching defenders."
-                }
+                {"title": "Static Quad, Hamstring & Hip Flexor Stretches", "reps": "60s hold each", "rest": "0s", "cues": "Full recovery flush."}
               ]
             }
           ]
         },
         {
-          "id": "fri",
-          "name": "Friday",
-          "dailyFocus": "Quarterbacking X & Re-Defending",
+          "day": "Friday",
+          "title": "Crease Craft & Tight-Space Power",
+          "focus": "Crease Play & Quarterbacking from X",
+          "badge": "High Intensity",
           "isLowImpact": false,
-          "notes": "Focus on vision from X, deceptive look-offs, and aggressive riding lanes.",
           "phases": [
             {
               "phaseNumber": 1,
-              "name": "Phase 1: Knee-Care Warm-Up & Mobility",
+              "title": "Knee-Care Warm-Up",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "High Knees & Butt Kicks",
-                  "duration": 3,
-                  "reps": "2 x 15 yds",
-                  "rest": "15s",
-                  "cues": "Rhythmic, low-impact cadence to elevate core temperature and warm quads."
-                },
-                {
-                  "title": "Kneeling Couch Stretch",
-                  "duration": 3,
-                  "reps": "2 x 45s / leg",
-                  "rest": "15s",
-                  "cues": "Maintain tall posture; breathe deeply into tight hip flexors."
-                },
-                {
-                  "title": "Ankle Dorsiflexion Rocks",
-                  "duration": 2,
-                  "reps": "2 x 10 / leg",
-                  "rest": "15s",
-                  "cues": "Drive knee forward over toes while keeping heel planted to improve shock absorption."
-                }
+                {"title": "Couch Stretch & Agility Ladder Fast-Feet", "reps": "3 mins", "rest": "0s", "cues": "Foot frequency and quad lengthening."},
+                {"title": "Toe / Heel Walks", "reps": "2 sets x 15 yards", "rest": "0s", "cues": "Lower leg stabilization."}
               ]
             },
             {
               "phaseNumber": 2,
-              "name": "Phase 2: Joint-Safe Plyometrics",
+              "title": "Joint-Safe Plyometrics",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Single-Leg Pogo Hops (Low Amplitude)",
-                  "duration": 4,
-                  "reps": "3 x 20s / leg",
-                  "rest": "30s rest",
-                  "cues": "Quick, stiff ankle rebounds just 1–2 inches off turf to build tendon resilience."
-                },
-                {
-                  "title": "Resisted First-Step Band Sprints",
-                  "duration": 4,
-                  "reps": "3 x 5 reps",
-                  "rest": "30s rest",
-                  "cues": "Parent holds waist band; explode forward 5 yards with aggressive forward shin angle."
-                }
+                {"title": "Drop-Step to Acceleration", "reps": "3 sets x 6 reps", "rest": "45s", "cues": "5yd burst out of turn."},
+                {"title": "Low-Depth Pogo Hops", "reps": "3 sets x 10 reps", "rest": "45s", "cues": "Stiff ankles, low knee bend."}
               ]
             },
             {
               "phaseNumber": 3,
-              "name": "Phase 3: Stick Work & Shooting",
+              "title": "Stick Work & Tight-Space Power",
+              "durationMins": 23,
               "drills": [
-                {
-                  "title": "Quarterbacking from X",
-                  "duration": 11,
-                  "reps": "15 targeted feeds",
-                  "rest": "20s",
-                  "cues": "Probe GLE behind goal, look off parent defender, thread crisp skip or crease feeds."
-                },
-                {
-                  "title": "Tough-Angle Crease Finishes",
-                  "duration": 10,
-                  "reps": "12 reps",
-                  "rest": "20s",
-                  "cues": "Absorb light pad bump from parent at GLE and reach across goal face to finish far pipe."
-                }
+                {"title": "8M Roll-and-Rise Power Shots", "reps": "20 reps", "rest": "45s", "cues": "Roll dummy, pop to space, blast."},
+                {"title": "Dodge Dummy Maze at Crease", "reps": "18 reps", "rest": "45s", "cues": "Fig-8 weave, fake & finish."},
+                {"title": "Backside Recovery Feeds", "reps": "20 reps", "rest": "30s", "cues": "Flash across crease low-to-high."}
               ]
             },
             {
               "phaseNumber": 4,
-              "name": "Phase 4: Cool-Down & Tactical IQ",
+              "title": "Extended Knee-Care Cool-Down",
+              "durationMins": 6,
               "drills": [
-                {
-                  "title": "Riding Traps & Lower-Leg Flush",
-                  "duration": 8,
-                  "reps": "8 mins",
-                  "rest": "None",
-                  "cues": "Light walk and quad stretch while reviewing how to angle defenders toward sidelines on clears."
-                }
+                {"title": "Quad, Hip Flexor & Glute Static Holds", "reps": "45s hold", "rest": "0s", "cues": "Static flexibility flush."}
               ]
             }
           ]
         },
         {
-          "id": "sat",
-          "name": "Saturday",
-          "dailyFocus": "High-Intensity Game Simulation",
+          "day": "Saturday",
+          "title": "Full Simulation & Max-Velocity Shooting",
+          "focus": "Match Scenario & High-Intensity Shooting",
+          "badge": "High Intensity",
           "isLowImpact": false,
-          "notes": "Full game-speed circuits combining dodging, feeding, cutting, and pressure 8-meter shots.",
           "phases": [
             {
               "phaseNumber": 1,
-              "name": "Phase 1: Knee-Care Warm-Up & Mobility",
+              "title": "Warm-Up & Activation",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Dynamic Leg Swings & Torso Rotations",
-                  "duration": 4,
-                  "reps": "2 x 10 reps",
-                  "rest": "15s",
-                  "cues": "Full-body rotational and hip prep for multi-directional game cuts."
-                },
-                {
-                  "title": "Standing Quad & Hip Flexor Flow",
-                  "duration": 4,
-                  "reps": "2 x 45s / leg",
-                  "rest": "15s",
-                  "cues": "Smooth dynamic quad lengthening prior to high-speed cutting."
-                }
+                {"title": "Walking Quad Stretches & Band Monster Walks", "reps": "3 mins", "rest": "0s", "cues": "Dynamic lower body priming."}
               ]
             },
             {
               "phaseNumber": 2,
-              "name": "Phase 2: Joint-Safe Plyometrics",
+              "title": "Joint-Safe Plyometrics",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Broad Jump to Multi-Directional Cut",
-                  "duration": 8,
-                  "reps": "3 x 5 reps",
-                  "rest": "45s rest",
-                  "cues": "Stick soft two-foot landing, react to parent hand signal, shuffle 3 yards left or right."
-                }
+                {"title": "Broad Jump to Decel Stick & Lateral Skaters", "reps": "3x5 / 3x6 reps", "rest": "45s", "cues": "Explosive lateral and linear deceleration."}
               ]
             },
             {
               "phaseNumber": 3,
-              "name": "Phase 3: Stick Work & Shooting",
+              "title": "Simulation & Max-Velocity Shooting",
+              "durationMins": 23,
               "drills": [
-                {
-                  "title": "Full-Sequence Attack Circuit",
-                  "duration": 13,
-                  "reps": "6 left / 6 right",
-                  "rest": "45s / set",
-                  "cues": "Dodge top wing dummy -> feed parent at X -> cut off crease screen -> catch & finish."
-                },
-                {
-                  "title": "Pressure 8-Meter Shooting",
-                  "duration": 9,
-                  "reps": "10 shots",
-                  "rest": "20s",
-                  "cues": "Parent applies light trail stick pressure; fake high and place shot low corner."
-                }
+                {"title": "8M Step-Down Max Power", "reps": "24 reps", "rest": "45s", "cues": "Full hip load & trunk whip."},
+                {"title": "The X-to-Wing Circuit", "reps": "8 full-speed reps", "rest": "45s", "cues": "Dodge X -> Feed -> Dodge Wing."},
+                {"title": "High-Pressure Padded Finishing", "reps": "15 reps", "rest": "30s", "cues": "Against pad pressure."}
               ]
             },
             {
               "phaseNumber": 4,
-              "name": "Phase 4: Cool-Down & Tactical IQ",
+              "title": "Extended Knee-Care Cool-Down",
+              "durationMins": 6,
               "drills": [
-                {
-                  "title": "End-of-Clock Possession & Static Stretch",
-                  "duration": 7,
-                  "reps": "7 mins",
-                  "rest": "None",
-                  "cues": "Full lower-body stretch while reviewing final-minute stall/possession rules behind X."
-                }
+                {"title": "Full Lower Body Static Flush", "reps": "60s hold each", "rest": "0s", "cues": "Complete recovery."}
               ]
             }
           ]
         },
         {
-          "id": "sun",
-          "name": "Sunday",
-          "dailyFocus": "Active Recovery & Restoration",
+          "day": "Sunday",
+          "title": "Active Recovery & Form Precision",
+          "focus": "Form Precision & Static Recovery",
+          "badge": "Active Recovery",
           "isLowImpact": true,
-          "notes": "Recovery Day: Zero joint impact. Lengthen quads, restore knee mobility, and refine stationary hands.",
           "phases": [
             {
               "phaseNumber": 1,
-              "name": "Phase 1: Knee-Care Warm-Up & Mobility",
+              "title": "Light Dynamic Flow & Foam Rolling",
+              "durationMins": 10,
               "drills": [
-                {
-                  "title": "Supine Quad Stretch",
-                  "duration": 6,
-                  "reps": "3 x 60s",
-                  "rest": "20s",
-                  "cues": "Heels toward glutes with gentle, continuous tension; slow nasal breathing."
-                },
-                {
-                  "title": "Half-Kneeling Psoas & Quad Stretch",
-                  "duration": 6,
-                  "reps": "3 x 45s / leg",
-                  "rest": "15s",
-                  "cues": "Deep hip and quad lengthening to relieve patellar tendon pull."
-                },
-                {
-                  "title": "Hamstring, Calf & Figure-4 Flushes",
-                  "duration": 6,
-                  "reps": "6 mins total",
-                  "rest": "None",
-                  "cues": "Relieve hip and lateral chain tension pulling on IT band and knee."
-                }
+                {"title": "Cat-Cow, Hip Circles, Light Quad/Calf Rolling", "reps": "10 mins", "rest": "0s", "cues": "Flush metabolic waste and loosen fascia."}
               ]
             },
             {
               "phaseNumber": 2,
-              "name": "Phase 2: Joint-Safe Plyometrics",
-              "drills": []
+              "title": "Joint-Safe Plyometrics (Skipped)",
+              "durationMins": 0,
+              "drills": [
+                {"title": "Rest day plyometrics omitted.", "reps": "0 reps", "rest": "0s", "cues": "Total joint preservation."}
+              ]
             },
             {
               "phaseNumber": 3,
-              "name": "Phase 3: Stick Work & Shooting",
+              "title": "Form-Focus 8M Precision Shooting (Zero Jump)",
+              "durationMins": 20,
               "drills": [
-                {
-                  "title": "Stationary Wall-Ball / Parent Toss",
-                  "duration": 15,
-                  "reps": "50 right / 50 left",
-                  "rest": "Continuous",
-                  "cues": "Zero footwork stress. Focus on one-hand catching, soft wrists, and quiet cradling."
-                }
+                {"title": "Precision Shooting", "reps": "50 Total Reps (25R / 25L)", "rest": "45s", "cues": "Zero-jump, form-focused power shooting from 8M. Focus on trunk whip, wrist snap, and hitting corners/pipes without joint stress."}
               ]
             },
             {
               "phaseNumber": 4,
-              "name": "Phase 4: Cool-Down & Tactical IQ",
+              "title": "Deep Static Recovery Stretch",
+              "durationMins": 15,
               "drills": [
-                {
-                  "title": "Weekly Film & Tactical Review",
-                  "duration": 10,
-                  "reps": "10 mins",
-                  "rest": "None",
-                  "cues": "Review pick angles, X-dodging timing, and slide reads from the week."
-                }
+                {"title": "Long-Hold Static Stretching", "reps": "15 mins", "rest": "0s", "cues": "Quads, hip flexors, hamstrings, and lower back."}
               ]
             }
           ]
@@ -576,311 +318,250 @@
       ]
     },
     {
-      "id": "midfield-transition-draw",
+      "id": "midfield-transition",
       "name": "Midfield / Transition & Draw Control",
-      "position": "Midfield",
-      "focus": "Two-Way Conditioning, Draw Circle Explosiveness & Transition Shooting on the Run",
-      "dailyCapMins": 45,
-      "days": [
+      "athlete": "Jordan",
+      "targetCapMins": 45,
+      "schedule": [
         {
-          "id": "mon",
-          "name": "Monday",
-          "dailyFocus": "Draw Circle Mechanics & Transition Burst",
+          "day": "Monday",
+          "title": "Transition Speed & Conditioning",
+          "focus": "Endurance & Ground Balls",
+          "badge": "High Intensity",
           "isLowImpact": false,
-          "notes": "Focus on draw wrist snap, self-draws, and full-field transition passing.",
           "phases": [
             {
               "phaseNumber": 1,
-              "name": "Phase 1: Knee-Care Warm-Up & Mobility",
+              "title": "Dynamic Warm-Up",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "World's Greatest Stretch + Quad Reach",
-                  "duration": 8,
-                  "reps": "2 x 6 / side",
-                  "rest": "15s",
-                  "cues": "Open thoracic spine, hip flexors, and quads prior to draw stances."
-                }
+                {"title": "High Knees & Butt Kicks", "reps": "2 sets x 20 yards", "rest": "0s", "cues": "Elevate heart rate."},
+                {"title": "Dynamic Lunges", "reps": "2 sets x 10 reps", "rest": "0s", "cues": "Activate hip flexors."}
               ]
             },
             {
               "phaseNumber": 2,
-              "name": "Phase 2: Joint-Safe Plyometrics",
+              "title": "Agility & Footwork",
+              "durationMins": 8,
               "drills": [
-                {
-                  "title": "Split-Stance Explosive Starts",
-                  "duration": 8,
-                  "reps": "4 x 4 / side",
-                  "rest": "30s rest",
-                  "cues": "Simulate draw whistle reaction; drive knees forward with zero false step."
-                }
+                {"title": "Cone Weave Sprints", "reps": "3 sets x 45s", "rest": "45s", "cues": "Tight turns and acceleration."}
               ]
             },
             {
               "phaseNumber": 3,
-              "name": "Phase 3: Stick Work & Shooting",
+              "title": "Transition & Shooting",
+              "durationMins": 23,
               "drills": [
-                {
-                  "title": "Draw Box-Out & Self-Draw Control",
-                  "duration": 10,
-                  "reps": "20 draws",
-                  "rest": "15s",
-                  "cues": "Snap wrists upward, track ball in air, secure possession away from dummy."
-                },
-                {
-                  "title": "Alley Dodging & Shooting on the Run",
-                  "duration": 11,
-                  "reps": "8 right / 8 left",
-                  "rest": "20s",
-                  "cues": "Torso rotated toward goal while sprinting down alley; bounce shot far corner."
-                }
+                {"title": "Fast Break Catch & Shoot", "reps": "30 reps", "rest": "30s", "cues": "On the run accuracy."},
+                {"title": "Ground Ball & Outlets", "reps": "25 reps", "rest": "30s", "cues": "Quick scoop and pass."}
               ]
             },
             {
               "phaseNumber": 4,
-              "name": "Phase 4: Cool-Down & Tactical IQ",
+              "title": "Cool-Down",
+              "durationMins": 6,
               "drills": [
-                {
-                  "title": "Circle Positioning & Hip Mobility",
-                  "duration": 8,
-                  "reps": "8 mins",
-                  "rest": "None",
-                  "cues": "Static hip/quad stretch while reviewing draw placement strategies."
-                }
+                {"title": "Static Hamstring & Quad Stretch", "reps": "60s hold", "rest": "0s", "cues": "Flush legs."}
               ]
             }
           ]
         },
         {
-          "id": "tue",
-          "name": "Tuesday",
-          "dailyFocus": "Low-Impact Clearing & Stick Protection",
+          "day": "Tuesday",
+          "title": "Draw Control & Agility",
+          "focus": "Draw Mechanics & Footwork",
+          "badge": "Basketball Night",
           "isLowImpact": true,
-          "notes": "Low-impact day: Phase 2 plyometrics zeroed out.",
-          "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Dynamic Hip Openers & Quad Stretch", "duration": 8, "reps": "2 x 10", "rest": "15s", "cues": "Controlled mobility without jumping." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "Pressure Clearing & Switch-Hand Cradling", "duration": 22, "reps": "25 reps", "rest": "20s", "cues": "Keep head up through midfield traffic; hit diagonal outlet passes cleanly." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "Transition Numbers Recognition", "duration": 10, "reps": "10 mins", "rest": "None", "cues": "Identify 4v3 fast-break advantages vs. pulling ball out to settle." }] }
-          ]
-        },
-        {
-          "id": "wed",
-          "name": "Wednesday",
-          "dailyFocus": "Two-Way Dodging & Defensive Recovery",
-          "isLowImpact": false,
-          "notes": "High-tempo midfielder transitions.",
-          "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Knee-Care Dynamic Flow", "duration": 8, "reps": "8 mins", "rest": "None", "cues": "Quad/hamstring activation." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [{ "title": "Lateral Shuffle to Sprint", "duration": 8, "reps": "4 x 15 yds", "rest": "30s", "cues": "Low hips, soft plant." }] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "Top-Center Split to Sweep Shot", "duration": 20, "reps": "16 reps", "rest": "20s", "cues": "Sell the split, keep hands free for mid-range shot." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "Midfield Slide & Recover Cues", "duration": 9, "reps": "9 mins", "rest": "None", "cues": "Communicate early on crease slides and recover to open shooter." }] }
-          ]
-        },
-        {
-          "id": "thu",
-          "name": "Thursday",
-          "dailyFocus": "Low-Impact Ground Balls & Quick Outlets",
-          "isLowImpact": true,
-          "notes": "Low-impact day: Phase 2 plyometrics zeroed out.",
-          "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Quad & Ankle Mobility Prep", "duration": 8, "reps": "8 mins", "rest": "None", "cues": "Deep hip hinge warm-up." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "Contested Ground Ball to Outlet", "duration": 22, "reps": "25 GBs", "rest": "15s", "cues": "Get butt low, scoop through ball, protect stick immediately." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "Possession Clock IQ & Stretching", "duration": 10, "reps": "10 mins", "rest": "None", "cues": "Smart shot selection late in possession clock." }] }
-          ]
-        },
-        {
-          "id": "fri",
-          "name": "Friday",
-          "dailyFocus": "Fast-Break Finishing & Re-Defending",
-          "isLowImpact": false,
-          "notes": "Speed transitions.",
-          "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Dynamic Warm-Up", "duration": 8, "reps": "8 mins", "rest": "None", "cues": "Full lower-body prep." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [{ "title": "Pogo Hops & Acceleration", "duration": 8, "reps": "3 x 20s", "rest": "30s", "cues": "Stiff ankles, soft knees." }] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "3v2 Trailer Catch & Shoot", "duration": 20, "reps": "18 reps", "rest": "20s", "cues": "Arrive late into high slot for clean catch-and-release." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "Backchecking Angles & Stretch", "duration": 9, "reps": "9 mins", "rest": "None", "cues": "Take away middle of field first on defensive transition." }] }
-          ]
-        },
-        {
-          "id": "sat",
-          "name": "Saturday",
-          "dailyFocus": "Full Midfield Conditioning Circuit",
-          "isLowImpact": false,
-          "notes": "Game-tempo endurance.",
-          "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Full-Body Mobility", "duration": 8, "reps": "8 mins", "rest": "None", "cues": "Prep hips and quads." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [{ "title": "Multi-Directional Cuts", "duration": 8, "reps": "3 x 5", "rest": "45s", "cues": "Stick every landing." }] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "Draw-to-Goal Simulation", "duration": 20, "reps": "10 full reps", "rest": "45s", "cues": "Win draw, sprint 30 yards, dodge dummy, finish." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "Static Stretch & Game Review", "duration": 9, "reps": "9 mins", "rest": "None", "cues": "Full recovery flush." }] }
-          ]
-        },
-        {
-          "id": "sun",
-          "name": "Sunday",
-          "dailyFocus": "Active Recovery & Stick Mastery",
-          "isLowImpact": true,
-          "notes": "Zero-impact restoration.",
-          "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Deep Quad & Hip Restoration", "duration": 18, "reps": "18 mins", "rest": "None", "cues": "Slow breathing and gentle holds." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "Stationary Two-Hand & Off-Hand Toss", "duration": 15, "reps": "100 reps", "rest": "None", "cues": "Soft hands, zero leg stress." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "Weekly Reflection", "duration": 10, "reps": "10 mins", "rest": "None", "cues": "Review draw and transition goals." }] }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "defense-footwork-clearing",
-      "name": "Defense / Footwork & Clearing",
-      "position": "Defense",
-      "focus": "1v1 Approach Angles, Hip Turns, Caused Turnovers & Pressure Clearing",
-      "dailyCapMins": 45,
-      "days": [
-        {
-          "id": "mon",
-          "name": "Monday",
-          "dailyFocus": "1v1 Approach & Hip-Turn Footwork",
-          "isLowImpact": false,
-          "notes": "Focus on choppy breakdown steps and dictating dodgers down the alley.",
           "phases": [
             {
               "phaseNumber": 1,
-              "name": "Phase 1: Knee-Care Warm-Up & Mobility",
-              "drills": [
-                {
-                  "title": "Lateral Lunges & Quad Stretch",
-                  "duration": 8,
-                  "reps": "2 x 8 / leg",
-                  "rest": "15s",
-                  "cues": "Open groin, hips, and quads for low defensive stances."
-                }
-              ]
+              "title": "Mobility Prep",
+              "durationMins": 8,
+              "drills": [{"title": "Shoulder & Core Activation", "reps": "8 mins", "rest": "0s", "cues": "Upper body prep."}]
             },
             {
               "phaseNumber": 2,
-              "name": "Phase 2: Joint-Safe Plyometrics",
-              "drills": [
-                {
-                  "title": "Drop-Step Hip Opens & Lateral Bounds",
-                  "duration": 8,
-                  "reps": "3 x 6 / side",
-                  "rest": "30s rest",
-                  "cues": "Snap hips 180 degrees without crossing feet; land softly on balls of feet."
-                }
-              ]
+              "title": "Plyometrics",
+              "durationMins": 0,
+              "drills": [{"title": "Skipped for cross-training", "reps": "0 reps", "rest": "0s", "cues": "Rest."}]
             },
             {
               "phaseNumber": 3,
-              "name": "Phase 3: Stick Work & Shooting",
-              "drills": [
-                {
-                  "title": "Approach, Breakdown & Stick-On-Hands",
-                  "duration": 11,
-                  "reps": "10 right / 10 left",
-                  "rest": "20s",
-                  "cues": "Sprint out to 8m arc, chop feet, keep stick on dodger's bottom hand."
-                },
-                {
-                  "title": "Interceptor Passing & Clear Outlets",
-                  "duration": 10,
-                  "reps": "30 passes",
-                  "rest": "15s",
-                  "cues": "Catch on the run, pivot cleanly to sideline, deliver crisp 20-yard clear."
-                }
-              ]
+              "title": "Draw Placement & Stick Protection",
+              "durationMins": 29,
+              "drills": [{"title": "Draw Control Placement Drills", "reps": "40 reps", "rest": "30s", "cues": "Control direction and height."}]
             },
             {
               "phaseNumber": 4,
-              "name": "Phase 4: Cool-Down & Tactical IQ",
-              "drills": [
-                {
-                  "title": "Slide & Double-Team Communication",
-                  "duration": 8,
-                  "reps": "8 mins",
-                  "rest": "None",
-                  "cues": "Quad/hip flush while reviewing 'I'm hot / I'm two' slide calls."
-                }
-              ]
+              "title": "Cool-Down",
+              "durationMins": 8,
+              "drills": [{"title": "Static Stretch", "reps": "8 mins", "rest": "0s", "cues": "Relax."}]
             }
           ]
         },
         {
-          "id": "tue",
-          "name": "Tuesday",
-          "dailyFocus": "Low-Impact Stick Checks & Clearing",
-          "isLowImpact": true,
-          "notes": "Low-impact day: Phase 2 plyometrics zeroed out.",
-          "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Hip & Quad Mobility", "duration": 8, "reps": "8 mins", "rest": "None", "cues": "Controlled range of motion." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "Controlled Lift & Poke Checks on Dummy", "duration": 22, "reps": "30 reps", "rest": "15s", "cues": "Keep feet moving while executing tight, legal stick checks." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "8-Meter Shooting Space Rules", "duration": 10, "reps": "10 mins", "rest": "None", "cues": "Maintain stick-length contact without obstructing shooting space." }] }
-          ]
-        },
-        {
-          "id": "wed",
-          "name": "Wednesday",
-          "dailyFocus": "GLE Defense & Crease Denial",
+          "day": "Wednesday",
+          "title": "Midfield Dodging & Shooting",
+          "focus": "Alley Dodging",
+          "badge": "High Intensity",
           "isLowImpact": false,
-          "notes": "Defending X-dodgers at goal line extended.",
           "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Dynamic Knee & Hip Prep", "duration": 8, "reps": "8 mins", "rest": "None", "cues": "Activate glutes and quads." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [{ "title": "Skater Jumps & Stick", "duration": 8, "reps": "3 x 6 / side", "rest": "30s", "cues": "Strong lateral deceleration." }] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "GLE Hold & Trail Check Recovery", "duration": 20, "reps": "14 reps", "rest": "20s", "cues": "Beat attacker to GLE; keep stick in passing lane." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "Ball-You-Man Positioning", "duration": 9, "reps": "9 mins", "rest": "None", "cues": "Open stance seeing both ball at X and cutter on weak side." }] }
+            {
+              "phaseNumber": 1,
+              "title": "Warm-Up",
+              "durationMins": 8,
+              "drills": [{"title": "Dynamic Stretches", "reps": "8 mins", "rest": "0s", "cues": "Warm up."}]
+            },
+            {
+              "phaseNumber": 2,
+              "title": "Plyometrics",
+              "durationMins": 8,
+              "drills": [{"title": "Box Jumps", "reps": "3x5", "rest": "45s", "cues": "Explosive power."}]
+            },
+            {
+              "phaseNumber": 3,
+              "title": "Alley Dodge & Rip",
+              "durationMins": 23,
+              "drills": [{"title": "Alley Dodges", "reps": "25 reps", "rest": "45s", "cues": "Speed to goal."}]
+            },
+            {
+              "phaseNumber": 4,
+              "title": "Cool-Down",
+              "durationMins": 6,
+              "drills": [{"title": "Static Stretches", "reps": "6 mins", "rest": "0s", "cues": "Flush."}]
+            }
           ]
         },
         {
-          "id": "thu",
-          "name": "Thursday",
-          "dailyFocus": "Low-Impact Ground Balls & Box-Outs",
+          "day": "Thursday",
+          "title": "Low-Impact Midfield Work",
+          "focus": "Passing & Catching",
+          "badge": "Basketball Night",
           "isLowImpact": true,
-          "notes": "Low-impact day: Phase 2 plyometrics zeroed out.",
           "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Lower Body Flexibility", "duration": 8, "reps": "8 mins", "rest": "None", "cues": "Gentle quad and groin prep." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "Crease Rebound Box-Out & Scoop", "duration": 22, "reps": "20 reps", "rest": "20s", "cues": "Establish hip contact first, then scoop cleanly to sideline." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "Goalie Outlet Timing & Stretch", "duration": 10, "reps": "10 mins", "rest": "None", "cues": "Banish-to-corner clearing patterns." }] }
+            {
+              "phaseNumber": 1,
+              "title": "Warm-Up",
+              "durationMins": 8,
+              "drills": [{"title": "Mobility", "reps": "8 mins", "rest": "0s", "cues": "Prep."}]
+            },
+            {
+              "phaseNumber": 2,
+              "title": "Plyometrics",
+              "durationMins": 0,
+              "drills": [{"title": "Skipped", "reps": "0", "rest": "0s", "cues": "None."}]
+            },
+            {
+              "phaseNumber": 3,
+              "title": "Wall Ball & Passing",
+              "durationMins": 29,
+              "drills": [{"title": "Wall Ball", "reps": "200 reps", "rest": "30s", "cues": "Clean catches."}]
+            },
+            {
+              "phaseNumber": 4,
+              "title": "Cool-Down",
+              "durationMins": 8,
+              "drills": [{"title": "Stretch", "reps": "8 mins", "rest": "0s", "cues": "Relax."}]
+            }
           ]
         },
         {
-          "id": "fri",
-          "name": "Friday",
-          "dailyFocus": "Off-Ball Cutting Denial & Interceptions",
+          "day": "Friday",
+          "title": "Speed & Re-Defending",
+          "focus": "Transition Defense",
+          "badge": "High Intensity",
           "isLowImpact": false,
-          "notes": "Jumping passing lanes safely.",
           "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Dynamic Warm-Up", "duration": 8, "reps": "8 mins", "rest": "None", "cues": "Full mobility." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [{ "title": "First-Step Closeouts", "duration": 8, "reps": "3 x 5", "rest": "30s", "cues": "Explosive 3-step burst." }] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "One-Hand Knockdowns & Quick Cradles", "duration": 20, "reps": "25 reps", "rest": "15s", "cues": "Tip high feeds and secure loose balls cleanly." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "Zone vs. Man Rotations", "duration": 9, "reps": "9 mins", "rest": "None", "cues": "Bumping cutters through the 8m." }] }
+            {
+              "phaseNumber": 1,
+              "title": "Warm-Up",
+              "durationMins": 8,
+              "drills": [{"title": "Dynamic Warmup", "reps": "8 mins", "rest": "0s", "cues": "Ready."}]
+            },
+            {
+              "phaseNumber": 2,
+              "title": "Plyometrics",
+              "durationMins": 8,
+              "drills": [{"title": "Lateral Bounds", "reps": "3x6", "rest": "45s", "cues": "Agility."}]
+            },
+            {
+              "phaseNumber": 3,
+              "title": "Transition Shooting",
+              "durationMins": 23,
+              "drills": [{"title": "On-the-Run Shooting", "reps": "25 reps", "rest": "45s", "cues": "Power."}]
+            },
+            {
+              "phaseNumber": 4,
+              "title": "Cool-Down",
+              "durationMins": 6,
+              "drills": [{"title": "Stretch", "reps": "6 mins", "rest": "0s", "cues": "Done."}]
+            }
           ]
         },
         {
-          "id": "sat",
-          "name": "Saturday",
-          "dailyFocus": "Full Defensive Stop-to-Clear Circuit",
+          "day": "Saturday",
+          "title": "Full Midfield Simulation",
+          "focus": "Game Pace",
+          "badge": "High Intensity",
           "isLowImpact": false,
-          "notes": "High-intensity game simulation.",
           "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Dynamic Prep", "duration": 8, "reps": "8 mins", "rest": "None", "cues": "Hip and quad prep." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [{ "title": "Multi-Directional Reaction Slides", "duration": 8, "reps": "3 x 5", "rest": "45s", "cues": "Low center of gravity." }] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "1v1 Stop -> Ground Ball -> 25yd Clear", "duration": 20, "reps": "10 full reps", "rest": "45s", "cues": "Complete defensive sequence at game speed." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "Static Stretch & Film Notes", "duration": 9, "reps": "9 mins", "rest": "None", "cues": "Recovery flush." }] }
+            {
+              "phaseNumber": 1,
+              "title": "Warm-Up",
+              "durationMins": 8,
+              "drills": [{"title": "Activation", "reps": "8 mins", "rest": "0s", "cues": "Prime."}]
+            },
+            {
+              "phaseNumber": 2,
+              "title": "Plyometrics",
+              "durationMins": 8,
+              "drills": [{"title": "Sprints & Jumps", "reps": "3x5", "rest": "45s", "cues": "Max."}]
+            },
+            {
+              "phaseNumber": 3,
+              "title": "Simulation Drills",
+              "durationMins": 23,
+              "drills": [{"title": "Full Field Transitions", "reps": "10 reps", "rest": "60s", "cues": "Pace."}]
+            },
+            {
+              "phaseNumber": 4,
+              "title": "Cool-Down",
+              "durationMins": 6,
+              "drills": [{"title": "Flush", "reps": "6 mins", "rest": "0s", "cues": "Static."}]
+            }
           ]
         },
         {
-          "id": "sun",
-          "name": "Sunday",
-          "dailyFocus": "Active Recovery & Stick Handling",
+          "day": "Sunday",
+          "title": "Active Recovery",
+          "focus": "Mobility",
+          "badge": "Active Recovery",
           "isLowImpact": true,
-          "notes": "Restorative recovery day.",
           "phases": [
-            { "phaseNumber": 1, "name": "Phase 1: Knee-Care Warm-Up & Mobility", "drills": [{ "title": "Deep Quad & Hip Stretch", "duration": 18, "reps": "18 mins", "rest": "None", "cues": "Gentle continuous tension." }] },
-            { "phaseNumber": 2, "name": "Phase 2: Joint-Safe Plyometrics", "drills": [] },
-            { "phaseNumber": 3, "name": "Phase 3: Stick Work & Shooting", "drills": [{ "title": "Stationary Partner Passing", "duration": 15, "reps": "100 passes", "rest": "None", "cues": "Crisp wrist snap, both hands." }] },
-            { "phaseNumber": 4, "name": "Phase 4: Cool-Down & Tactical IQ", "drills": [{ "title": "Weekly Defensive Review", "duration": 10, "reps": "10 mins", "rest": "None", "cues": "Review clearing and 1v1 cues." }] }
+            {
+              "phaseNumber": 1,
+              "title": "Recovery Flow",
+              "durationMins": 10,
+              "drills": [{"title": "Foam Rolling", "reps": "10 mins", "rest": "0s", "cues": "Roll."}]
+            },
+            {
+              "phaseNumber": 2,
+              "title": "Plyometrics",
+              "durationMins": 0,
+              "drills": [{"title": "None", "reps": "0", "rest": "0s", "cues": "Rest."}]
+            },
+            {
+              "phaseNumber": 3,
+              "title": "Light Stick Work",
+              "durationMins": 20,
+              "drills": [{"title": "Wall Ball", "reps": "100 reps", "rest": "30s", "cues": "Form."}]
+            },
+            {
+              "phaseNumber": 4,
+              "title": "Deep Stretch",
+              "durationMins": 15,
+              "drills": [{"title": "Static Stretching", "reps": "15 mins", "rest": "0s", "cues": "Hold."}]
+            }
           ]
         }
       ]

@@ -1,657 +1,751 @@
 /**
- * Lacrosse Practice & Training Planner
- * Serverless GitHub Pages + GitHub REST API Live Sync Engine
+ * Lacrosse Practice & Training Planner - Client Logic
+ * Handles GitHub REST API sync, multi-athlete profiles, interactive checklists,
+ * countdown timers, and in-browser schedule editing with duration validation.
  */
 
-const STORAGE_KEYS = {
-  GH_CONFIG: 'lax_planner_gh_config',
-  LOCAL_DRAFT: 'lax_planner_local_draft'
-};
+class LaxPlannerApp {
+    constructor() {
+        this.data = null;
+        this.activeProfileId = 'attack-x';
+        this.activeDayIndex = 0;
+        this.githubConfig = {
+            owner: '',
+            repo: '',
+            branch: 'main',
+            path: 'data.json',
+            token: ''
+        };
+        this.timers = {}; // active countdown intervals
+        this.init();
+    }
 
-// Application State
-let appData = null;
-let activeProfileId = null;
-let activeDayId = 'mon';
-let hasUnsavedChanges = false;
+    async init() {
+        this.loadGitHubConfig();
+        this.parseURLParams();
+        await this.loadData();
+        this.initEventListeners();
+        this.render();
+        this.updateSyncStatusIndicator();
+    }
 
-// Default GitHub Config (pre-populated for convenience, token stays blank for public viewers)
-const DEFAULT_GH_CONFIG = {
-  owner: 'kuhnsdc',
-  repo: 'Lax_Workout_plan',
-  branch: 'main',
-  path: 'data.json',
-  token: ''
-};
+    loadGitHubConfig() {
+        const saved = localStorage.getItem('lax_github_config');
+        if (saved) {
+            try {
+                this.githubConfig = JSON.parse(saved);
+            } catch (e) {
+                console.error("Failed to parse GitHub config", e);
+            }
+        }
+    }
 
-// ============================================================================
-// 1. INITIALIZATION & DATA LOADING
-// ============================================================================
+    saveGitHubConfig() {
+        localStorage.setItem('lax_github_config', JSON.stringify(this.githubConfig));
+    }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  applyRoleVisibility();
-  bindEvents();
-  await loadInitialData();
-});
+    parseURLParams() {
+        const params = new URLSearchParams(window.location.search);
+        const profileParam = params.get('profile');
+        if (profileParam) {
+            this.activeProfileId = profileParam;
+        }
+    }
 
-function getGhConfig() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.GH_CONFIG) || 'null');
-    return { ...DEFAULT_GH_CONFIG, ...(saved || {}) };
-  } catch {
-    return { ...DEFAULT_GH_CONFIG };
-  }
-}
+    async loadData() {
+        // Try local storage first for offline / unsaved edits
+        const cached = localStorage.getItem('lax_plan_data_' + this.activeProfileId);
+        if (cached) {
+            try {
+                const parsed = JSON.parse(cached);
+                this.data = parsed;
+                this.checkAuthVisibility();
+                return;
+            } catch (e) {
+                console.error("Failed to load cached profile data", e);
+            }
+        }
 
-function isAdminAuthenticated() {
-  const cfg = getGhConfig();
-  return Boolean(cfg.token && cfg.token.trim().length > 0);
-}
+        // Otherwise fetch data.json with cache-busting
+        try {
+            const res = await fetch('data.json?t=' + Date.now());
+            if (!res.ok) throw new Error("Failed to fetch data.json");
+            const json = await res.json();
+            this.data = json;
+            // Cache locally
+            localStorage.setItem('lax_plan_data_store', JSON.stringify(json));
+        } catch (err) {
+            console.warn("Could not fetch data.json, falling back to embedded default data", err);
+            // Fallback default structure
+            this.data = { profiles: [] };
+        }
+        this.checkAuthVisibility();
+    }
 
-function applyRoleVisibility() {
-  if (isAdminAuthenticated()) {
-    document.body.classList.add('is-admin');
-  } else {
-    document.body.classList.remove('is-admin');
-  }
-}
+    getActiveProfile() {
+        if (!this.data || !this.data.profiles) return null;
+        let p = this.data.profiles.find(item => item.id === this.activeProfileId);
+        if (!p && this.data.profiles.length > 0) {
+            p = this.data.profiles[0];
+            this.activeProfileId = p.id;
+        }
+        return p;
+    }
 
-async function loadInitialData() {
-  // 1. Fetch live data.json with cache-busting timestamp so updates appear immediately
-  try {
-    const cacheBuster = `t=${Date.now()}`;
-    const response = await fetch(`data.json?${cacheBuster}`, { cache: 'no-store' });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    appData = await response.json();
-  } catch (err) {
-    console.error('Failed to fetch live data.json:', err);
-    showToast('Error loading data.json. Check repository file.', true);
-    return;
-  }
+    checkAuthVisibility() {
+        const hasToken = !!this.githubConfig.token && this.githubConfig.token.trim() !== '';
+        const adminElements = document.querySelectorAll('.admin-only');
+        adminElements.forEach(el => {
+            if (hasToken) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        });
+    }
 
-  // 2. Determine active profile from URL query parameter (?profile=...)
-  const urlParams = new URLSearchParams(window.location.search);
-  const requestedProfile = urlParams.get('profile');
+    initEventListeners() {
+        // Profile Switcher change
+        document.getElementById('profile-select').addEventListener('change', (e) => {
+            this.activeProfileId = e.target.value;
+            this.activeDayIndex = 0;
+            this.render();
+        });
 
-  if (requestedProfile && appData.profiles.some(p => p.id === requestedProfile)) {
-    activeProfileId = requestedProfile;
-  } else if (appData.profiles.length > 0) {
-    activeProfileId = appData.profiles[0].id;
-  }
+        // SMS Share (Windows optimized)
+        document.getElementById('btn-share-sms').addEventListener('click', () => {
+            const payload = `${window.location.origin}${window.location.pathname}?profile=${this.activeProfileId}`;
+            const textBody = `Updated Plan: ${payload}`;
+            const smsUrl = `sms:?&body=${encodeURIComponent(textBody)}`;
+            window.location.href = smsUrl;
+        });
 
-  // 3. Auto-select current day of week (Monday-Sunday)
-  const dayIds = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-  const todayId = dayIds[new Date().getDay()];
-  const profile = getActiveProfile();
-  if (profile && profile.days.some(d => d.id === todayId)) {
-    activeDayId = todayId;
-  }
+        // Copy Link
+        document.getElementById('btn-copy-link').addEventListener('click', () => {
+            const payload = `${window.location.origin}${window.location.pathname}?profile=${this.activeProfileId}`;
+            navigator.clipboard.writeText(payload).then(() => {
+                alert("Shareable link copied to clipboard!");
+            }).catch(err => {
+                console.error("Failed to copy link", err);
+            });
+        });
 
-  renderAll();
-}
+        // Modal Sync Open/Close
+        document.getElementById('btn-open-sync').addEventListener('click', () => {
+            this.populateSyncModalFields();
+            document.getElementById('modal-sync').classList.remove('hidden');
+        });
+        document.getElementById('btn-close-sync').addEventListener('click', () => {
+            document.getElementById('modal-sync').classList.add('hidden');
+        });
 
-// ============================================================================
-// 2. STATE HELPERS & LIVE DURATION VALIDATION
-// ============================================================================
+        // Sync Actions
+        document.getElementById('btn-save-auth').addEventListener('click', () => this.saveSyncSettingsFromModal());
+        document.getElementById('btn-test-auth').addEventListener('click', () => this.testGitHubConnection());
+        document.getElementById('btn-clear-auth').addEventListener('click', () => this.clearGitHubAuth());
 
-function getActiveProfile() {
-  if (!appData || !appData.profiles) return null;
-  return appData.profiles.find(p => p.id === activeProfileId) || appData.profiles[0];
-}
+        // Editor Modal Open/Close
+        document.getElementById('btn-open-editor').addEventListener('click', () => {
+            this.openEditorModal();
+        });
+        document.getElementById('btn-close-editor').addEventListener('click', () => {
+            document.getElementById('modal-editor').classList.add('hidden');
+        });
+        document.getElementById('btn-cancel-editor').addEventListener('click', () => {
+            document.getElementById('modal-editor').classList.add('hidden');
+        });
 
-function getActiveDay() {
-  const profile = getActiveProfile();
-  if (!profile) return null;
-  return profile.days.find(d => d.id === activeDayId) || profile.days[0];
-}
+        // Editor Day Switch
+        document.getElementById('editor-day-select').addEventListener('change', (e) => {
+            this.renderEditorFormForDay(parseInt(e.target.value));
+        });
 
-function calculatePhaseMinutes(phase, isLowImpactDay) {
-  // Phase 2 (Joint-Safe Plyometrics) dynamically scales to 0 mins on low-impact/cross-training days
-  if (isLowImpactDay && phase.phaseNumber === 2) {
-    return 0;
-  }
-  return (phase.drills || []).reduce((sum, drill) => sum + (Number(drill.duration) || 0), 0);
-}
+        // Publish to GitHub
+        document.getElementById('btn-publish-github').addEventListener('click', () => {
+            this.publishToGitHub();
+        });
+    }
 
-function calculateDayMinutes(day) {
-  if (!day || !day.phases) return 0;
-  return day.phases.reduce((sum, phase) => sum + calculatePhaseMinutes(phase, day.isLowImpact), 0);
-}
+    render() {
+        this.renderProfileSelector();
+        this.renderDayTabs();
+        this.renderActiveDayView();
+    }
 
-function markUnsaved() {
-  hasUnsavedChanges = true;
-  const badge = document.getElementById('unsaved-badge');
-  if (badge) badge.classList.remove('hidden');
-}
+    renderProfileSelector() {
+        const select = document.getElementById('profile-select');
+        select.innerHTML = '';
+        if (!this.data || !this.data.profiles) return;
 
-function syncUrlQueryParam() {
-  const url = new URL(window.location.href);
-  url.searchParams.set('profile', activeProfileId);
-  window.history.replaceState({}, '', url.toString());
-}
+        this.data.profiles.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = `${p.name} (${p.athlete})`;
+            if (p.id === this.activeProfileId) opt.selected = true;
+            select.appendChild(opt);
+        });
 
-// ============================================================================
-// 3. UI RENDERING
-// ============================================================================
+        const profileBadge = document.getElementById('active-profile-badge');
+        const profile = this.getActiveProfile();
+        if (profile) {
+            profileBadge.textContent = `${profile.athlete} | Cap: ${profile.targetCapMins}m`;
+        }
+    }
 
-function renderAll() {
-  const profile = getActiveProfile();
-  if (!profile) return;
+    renderDayTabs() {
+        const container = document.getElementById('day-tabs');
+        container.innerHTML = '';
+        const profile = this.getActiveProfile();
+        if (!profile || !profile.schedule) return;
 
-  syncUrlQueryParam();
-  renderProfileSelector();
-  renderProfileHeader(profile);
-  renderDayTabs(profile);
-  renderActiveDay(profile);
-}
+        profile.schedule.forEach((dayObj, index) => {
+            const btn = document.createElement('button');
+            const isActive = index === this.activeDayIndex;
+            btn.className = `px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+                isActive 
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-900/40' 
+                : 'bg-cardBg hover:bg-slate-800 text-slate-300 border border-cardBorder'
+            }`;
+            
+            let badgeHtml = '';
+            if (dayObj.badge) {
+                badgeHtml = `<span class="text-[10px] px-1.5 py-0.5 rounded font-semibold ${dayObj.isLowImpact ? 'bg-amber-900/60 text-amber-300 border border-amber-700/50' : 'bg-purple-900/60 text-purple-300 border border-purple-700/50'}">${dayObj.badge}</span>`;
+            }
 
-function renderProfileSelector() {
-  const selector = document.getElementById('profile-selector');
-  selector.innerHTML = appData.profiles
-    .map(p => `<option value="${escapeHtml(p.id)}" ${p.id === activeProfileId ? 'selected' : ''}>${escapeHtml(p.name)}</option>`)
-    .join('');
-}
+            btn.innerHTML = `<span>${dayObj.day}</span> ${badgeHtml}`;
+            btn.addEventListener('click', () => {
+                this.activeDayIndex = index;
+                this.render();
+            });
+            container.appendChild(btn);
+        });
+    }
 
-function renderProfileHeader(profile) {
-  document.getElementById('profile-title').textContent = profile.name;
-  document.getElementById('profile-position-badge').textContent = profile.position;
-  document.getElementById('profile-focus').textContent = profile.focus;
-  document.getElementById('profile-cap-display').textContent = `≤ ${profile.dailyCapMins} Mins`;
-}
+    renderActiveDayView() {
+        const container = document.getElementById('day-view-container');
+        container.innerHTML = '';
+        const profile = this.getActiveProfile();
+        if (!profile || !profile.schedule) return;
 
-function renderDayTabs(profile) {
-  const container = document.getElementById('day-tabs');
-  container.innerHTML = profile.days.map(day => {
-    const isActive = day.id === activeDayId;
-    const totalMins = calculateDayMinutes(day);
-    const isOverCap = totalMins > profile.dailyCapMins;
+        const day = profile.schedule[this.activeDayIndex];
+        if (!day) return;
 
-    const activeClasses = isActive
-      ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
-      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100';
+        // Calculate total duration across phases
+        const totalMins = day.phases.reduce((sum, p) => sum + (parseInt(p.durationMins) || 0), 0);
+        const isOverCap = totalMins > profile.targetCapMins;
 
-    return `
-      <button type="button" data-day-id="${day.id}"
-        class="day-tab-btn shrink-0 px-3.5 py-2 rounded-xl border text-left transition flex flex-col min-w-[92px] ${activeClasses}">
-        <div class="flex items-center justify-between w-full gap-1">
-          <span class="text-xs font-bold uppercase tracking-wide">${day.name.slice(0, 3)}</span>
-          ${day.isLowImpact ? '<span title="Low-Impact Day" class="text-[11px]">🛡️</span>' : ''}
-        </div>
-        <span class="text-[11px] mt-0.5 ${isOverCap ? 'text-rose-400 font-bold' : (isActive ? 'text-emerald-400' : 'text-slate-500')}">
-          ${totalMins}m
-        </span>
-      </button>
-    `;
-  }).join('');
-
-  container.querySelectorAll('.day-tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      activeDayId = btn.dataset.dayId;
-      renderAll();
-    });
-  });
-}
-
-function renderActiveDay(profile) {
-  const day = getActiveDay();
-  if (!day) return;
-
-  const totalMins = calculateDayMinutes(day);
-  const capMins = Number(profile.dailyCapMins) || 45;
-  const isOverCap = totalMins > capMins;
-
-  document.getElementById('day-heading').textContent = `${day.name}: ${day.dailyFocus}`;
-  document.getElementById('day-focus-note').textContent = day.notes || '';
-  document.getElementById('day-total-mins').textContent = totalMins;
-  document.getElementById('day-cap-mins').textContent = capMins;
-
-  // Low-impact badge
-  const lowImpactBadge = document.getElementById('low-impact-badge');
-  if (day.isLowImpact) {
-    lowImpactBadge.classList.remove('hidden');
-  } else {
-    lowImpactBadge.classList.add('hidden');
-  }
-
-  // Duration pill styling & cap warning
-  const durationPill = document.getElementById('duration-pill');
-  const warningBanner = document.getElementById('cap-warning-banner');
-  if (isOverCap) {
-    durationPill.className = 'px-3.5 py-2 rounded-lg border text-sm font-bold flex items-center gap-2 bg-rose-50 border-rose-300 text-rose-800';
-    warningBanner.classList.remove('hidden');
-  } else {
-    durationPill.className = 'px-3.5 py-2 rounded-lg border text-sm font-bold flex items-center gap-2 bg-emerald-50 border-emerald-200 text-emerald-800';
-    warningBanner.classList.add('hidden');
-  }
-
-  // Render 4 Timed Phases
-  const phasesContainer = document.getElementById('phases-container');
-  phasesContainer.innerHTML = day.phases.map((phase, pIdx) => {
-    const isZeroedPlyo = day.isLowImpact && phase.phaseNumber === 2;
-    const phaseMins = calculatePhaseMinutes(phase, day.isLowImpact);
-
-    const drillsHtml = isZeroedPlyo
-      ? `<div class="p-4 text-xs text-blue-800 bg-blue-50/70 rounded-b-xl">
-           <strong>Joint-Safety Protection Active:</strong> Phase 2 plyometrics are automatically scaled to <strong>0 mins</strong> on low-impact / cross-training days. Toggle off Low-Impact Day in the admin bar to restore plyometrics.
-         </div>`
-      : (phase.drills.length === 0
-          ? `<div class="p-4 text-xs text-slate-400 italic">No drills scheduled in this phase.</div>`
-          : `<ul class="divide-y divide-slate-100">
-              ${phase.drills.map((drill, dIdx) => `
-                <li class="p-4 hover:bg-slate-50/80 transition flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-                  <div class="space-y-1 flex-1">
-                    <div class="flex items-center gap-2 flex-wrap">
-                      <span class="font-bold text-sm text-slate-900">${escapeHtml(drill.title)}</span>
-                      <span class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                        ${Number(drill.duration)} min
-                      </span>
-                      <span class="text-xs font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-700">
-                        ${escapeHtml(drill.reps)}
-                      </span>
-                      ${drill.rest ? `<span class="text-xs text-slate-500">• ${escapeHtml(drill.rest)}</span>` : ''}
+        let html = `
+            <div class="bg-cardBg border border-cardBorder rounded-2xl p-6 shadow-xl space-y-6">
+                <!-- Day Header -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-cardBorder pb-5">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs uppercase tracking-wider font-bold text-blue-400">${day.day} Training Schedule</span>
+                            ${day.badge ? `<span class="text-xs px-2 py-0.5 rounded-full font-semibold ${day.isLowImpact ? 'bg-amber-900/60 text-amber-300 border border-amber-700/50' : 'bg-purple-900/60 text-purple-300 border border-purple-700/50'}">${day.badge}</span>` : ''}
+                        </div>
+                        <h2 class="text-2xl font-black text-white">${day.title}</h2>
+                        <p class="text-sm text-slate-400 mt-0.5">Focus: <span class="text-slate-200 font-medium">${day.focus}</span></p>
                     </div>
-                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${escapeHtml(drill.cues)}</p>
-                  </div>
 
-                  <!-- Admin Controls: Edit & Delete Drill -->
-                  <div class="admin-only flex items-center gap-1.5 shrink-0 self-end sm:self-center">
-                    <button type="button" data-action="edit-drill" data-phase="${pIdx}" data-drill="${dIdx}"
-                      class="px-2.5 py-1 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 rounded-md transition">
-                      Edit
-                    </button>
-                    <button type="button" data-action="delete-drill" data-phase="${pIdx}" data-drill="${dIdx}"
-                      class="px-2.5 py-1 text-xs font-semibold text-rose-600 bg-white hover:bg-rose-50 border border-rose-200 rounded-md transition">
-                      Delete
-                    </button>
-                  </div>
-                </li>
-              `).join('')}
-            </ul>`
-        );
+                    <div class="flex items-center gap-3 bg-slate-900/80 px-4 py-2.5 rounded-xl border border-cardBorder">
+                        <div class="text-right">
+                            <div class="text-xs text-slate-400 font-medium">Daily Time Cap</div>
+                            <div class="text-sm font-bold ${isOverCap ? 'text-red-400' : 'text-emerald-400'}">${totalMins} / ${profile.targetCapMins} Mins</div>
+                        </div>
+                        ${isOverCap ? `<span class="text-xs bg-red-950 text-red-300 border border-red-800 px-2 py-1 rounded font-semibold">Exceeds Cap</span>` : ''}
+                    </div>
+                </div>
 
-    return `
-      <article class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="bg-slate-100/80 px-4 py-3 border-b border-slate-200 flex items-center justify-between gap-2">
-          <div class="flex items-center gap-2">
-            <h4 class="font-bold text-sm sm:text-base text-slate-800">${escapeHtml(phase.name)}</h4>
-            <span class="text-xs font-bold px-2.5 py-0.5 rounded-full ${isZeroedPlyo ? 'bg-blue-100 text-blue-800' : 'bg-slate-200 text-slate-800'}">
-              ${phaseMins} mins
-            </span>
-          </div>
-          ${!isZeroedPlyo ? `
-            <button type="button" data-action="add-drill" data-phase="${pIdx}"
-              class="admin-only text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white px-2.5 py-1 rounded-lg transition">
-              + Add Drill
-            </button>
-          ` : ''}
-        </div>
-        ${drillsHtml}
-      </article>
-    `;
-  }).join('');
+                <!-- Phases Grid -->
+                <div class="space-y-6" id="phases-list">
+        `;
 
-  // Bind phase/drill action buttons
-  phasesContainer.querySelectorAll('[data-action="add-drill"]').forEach(btn => {
-    btn.addEventListener('click', () => openDrillModal(Number(btn.dataset.phase), null));
-  });
-  phasesContainer.querySelectorAll('[data-action="edit-drill"]').forEach(btn => {
-    btn.addEventListener('click', () => openDrillModal(Number(btn.dataset.phase), Number(btn.dataset.drill)));
-  });
-  phasesContainer.querySelectorAll('[data-action="delete-drill"]').forEach(btn => {
-    btn.addEventListener('click', () => deleteDrill(Number(btn.dataset.phase), Number(btn.dataset.drill)));
-  });
-}
+        day.phases.forEach((phase, pIdx) => {
+            html += `
+                <div class="bg-slate-900/60 border border-cardBorder rounded-xl p-5 space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center font-bold text-sm">
+                                ${phase.phaseNumber}
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-100 text-base">Phase ${phase.phaseNumber}: ${phase.title}</h3>
+                                <p class="text-xs text-slate-400">Duration: <span class="text-slate-200 font-semibold">${phase.durationMins} Minutes</span></p>
+                            </div>
+                        </div>
 
-// ============================================================================
-// 4. IN-BROWSER SCHEDULE & DRILL EDITOR
-// ============================================================================
+                        <!-- Phase Timer Controller -->
+                        <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700">
+                            <span class="text-xs font-mono font-bold text-blue-400 timer-display" data-timer-id="timer-${this.activeDayIndex}-${pIdx}">${phase.durationMins}:00</span>
+                            <button class="bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded transition btn-start-timer" data-day="${this.activeDayIndex}" data-phase="${pIdx}" data-mins="${phase.durationMins}">Start Timer</button>
+                            <button class="bg-slate-700 hover:bg-slate-600 text-slate-300 text-[10px] font-semibold px-2 py-1 rounded transition btn-reset-timer" data-day="${this.activeDayIndex}" data-phase="${pIdx}" data-mins="${phase.durationMins}">Reset</button>
+                        </div>
+                    </div>
 
-function openDrillModal(phaseIndex, drillIndex) {
-  const day = getActiveDay();
-  const phase = day.phases[phaseIndex];
-  const isEdit = drillIndex !== null;
+                    <!-- Drills Table / List -->
+                    <div class="space-y-3">
+            `;
 
-  document.getElementById('drill-modal-title').textContent = isEdit
-    ? `Edit Drill — ${phase.name}`
-    : `Add Drill — ${phase.name}`;
+            phase.drills.forEach((drill, dIdx) => {
+                const checkId = `check-${this.activeDayIndex}-${pIdx}-${dIdx}`;
+                const isChecked = localStorage.getItem(checkId) === 'true';
 
-  document.getElementById('drill-phase-index').value = phaseIndex;
-  document.getElementById('drill-index').value = isEdit ? drillIndex : '';
+                html += `
+                    <div class="bg-cardBg/80 border border-cardBorder/60 rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition hover:border-slate-600">
+                        <div class="flex items-start gap-3.5">
+                            <input type="checkbox" id="${checkId}" ${isChecked ? 'checked' : ''} class="mt-1 w-4 h-4 rounded bg-slate-900 border-slate-700 text-blue-600 focus:ring-blue-500 cursor-pointer drill-checkbox" data-check-id="${checkId}">
+                            <div>
+                                <h4 class="font-semibold text-slate-200 text-sm ${isChecked ? 'line-through text-slate-400' : ''}">${drill.title}</h4>
+                                <p class="text-xs text-slate-400 mt-1">Cues: <span class="text-slate-300">${drill.cues}</span></p>
+                            </div>
+                        </div>
 
-  if (isEdit) {
-    const drill = phase.drills[drillIndex];
-    document.getElementById('drill-title').value = drill.title;
-    document.getElementById('drill-duration').value = drill.duration;
-    document.getElementById('drill-reps').value = drill.reps;
-    document.getElementById('drill-rest').value = drill.rest || '';
-    document.getElementById('drill-cues').value = drill.cues;
-  } else {
-    document.getElementById('drill-form').reset();
-    document.getElementById('drill-duration').value = 5;
-  }
+                        <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                            <div class="text-left md:text-right">
+                                <div class="text-[10px] uppercase font-bold text-slate-400">Target</div>
+                                <div class="text-xs font-bold text-blue-300 bg-blue-950/60 border border-blue-900/60 px-2.5 py-1 rounded-lg">${drill.reps}</div>
+                            </div>
+                            <div class="text-left md:text-right">
+                                <div class="text-[10px] uppercase font-bold text-slate-400">Rest Interval</div>
+                                <div class="text-xs font-bold text-amber-300 bg-amber-950/60 border border-amber-900/60 px-2.5 py-1 rounded-lg">${drill.rest}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
 
-  document.getElementById('drill-modal').classList.remove('hidden');
-}
+            html += `
+                    </div>
+                </div>
+            `;
+        });
 
-function closeDrillModal() {
-  document.getElementById('drill-modal').classList.add('hidden');
-}
+        html += `
+                </div>
+            </div>
+        `;
 
-function handleSaveDrill(e) {
-  e.preventDefault();
-  const phaseIndex = Number(document.getElementById('drill-phase-index').value);
-  const drillIndexRaw = document.getElementById('drill-index').value;
-
-  const drillObj = {
-    title: document.getElementById('drill-title').value.trim(),
-    duration: Number(document.getElementById('drill-duration').value) || 0,
-    reps: document.getElementById('drill-reps').value.trim(),
-    rest: document.getElementById('drill-rest').value.trim(),
-    cues: document.getElementById('drill-cues').value.trim()
-  };
-
-  const day = getActiveDay();
-  if (drillIndexRaw !== '') {
-    day.phases[phaseIndex].drills[Number(drillIndexRaw)] = drillObj;
-  } else {
-    day.phases[phaseIndex].drills.push(drillObj);
-  }
-
-  closeDrillModal();
-  markUnsaved();
-  renderAll();
-  showToast('Drill updated locally. Click "Save & Publish to GitHub" to push live.');
-}
-
-function deleteDrill(phaseIndex, drillIndex) {
-  const day = getActiveDay();
-  const drill = day.phases[phaseIndex].drills[drillIndex];
-  if (!confirm(`Remove "${drill.title}" from ${day.name}?`)) return;
-
-  day.phases[phaseIndex].drills.splice(drillIndex, 1);
-  markUnsaved();
-  renderAll();
-  showToast('Drill removed locally.');
-}
-
-function toggleLowImpactDay() {
-  const day = getActiveDay();
-  if (!day) return;
-  day.isLowImpact = !day.isLowImpact;
-  markUnsaved();
-  renderAll();
-  showToast(day.isLowImpact
-    ? `${day.name} set to Low-Impact Mode (Phase 2 = 0 mins).`
-    : `${day.name} restored to Standard Impact Mode.`);
-}
-
-// ============================================================================
-// 5. MULTI-ATHLETE PROFILE CREATION
-// ============================================================================
-
-function handleCreateProfile(e) {
-  e.preventDefault();
-  const name = document.getElementById('new-profile-name').value.trim();
-  const position = document.getElementById('new-profile-position').value.trim();
-  const dailyCapMins = Number(document.getElementById('new-profile-cap').value) || 45;
-  const focus = document.getElementById('new-profile-focus').value.trim();
-
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString().slice(-4);
-
-  const dayNames = [
-    { id: 'mon', name: 'Monday' },
-    { id: 'tue', name: 'Tuesday' },
-    { id: 'wed', name: 'Wednesday' },
-    { id: 'thu', name: 'Thursday' },
-    { id: 'fri', name: 'Friday' },
-    { id: 'sat', name: 'Saturday' },
-    { id: 'sun', name: 'Sunday' }
-  ];
-
-  const newProfile = {
-    id: slug,
-    name,
-    position,
-    focus,
-    dailyCapMins,
-    days: dayNames.map(d => ({
-      id: d.id,
-      name: d.name,
-      dailyFocus: `${position} Skill & Conditioning`,
-      isLowImpact: d.id === 'sun',
-      notes: '',
-      phases: [
-        { phaseNumber: 1, name: 'Phase 1: Knee-Care Warm-Up & Mobility', drills: [] },
-        { phaseNumber: 2, name: 'Phase 2: Joint-Safe Plyometrics', drills: [] },
-        { phaseNumber: 3, name: 'Phase 3: Stick Work & Shooting', drills: [] },
-        { phaseNumber: 4, name: 'Phase 4: Cool-Down & Tactical IQ', drills: [] }
-      ]
-    }))
-  };
-
-  appData.profiles.push(newProfile);
-  activeProfileId = newProfile.id;
-  document.getElementById('profile-modal').classList.add('hidden');
-  document.getElementById('profile-form').reset();
-
-  markUnsaved();
-  renderAll();
-  showToast(`Profile "${name}" created.`);
-}
-
-// ============================================================================
-// 6. GITHUB REST API LIVE SYNC (READ / WRITE)
-// ============================================================================
-
-/**
- * UTF-8 Safe Base64 Encoder (prevents InvalidCharacterError on emojis/accents)
- */
-function utf8ToBase64(str) {
-  const bytes = new TextEncoder().encode(str);
-  let binary = '';
-  for (let i = 0; i < bytes.byteLength; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary);
-}
-
-async function publishToGitHub() {
-  const cfg = getGhConfig();
-  if (!cfg.token || !cfg.owner || !cfg.repo || !cfg.path) {
-    showToast('Missing GitHub credentials. Configure Admin Sync in footer.', true);
-    return;
-  }
-
-  const publishBtn = document.getElementById('btn-publish-github');
-  const originalText = publishBtn.textContent;
-  publishBtn.disabled = true;
-  publishBtn.textContent = 'Publishing...';
-
-  const apiUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}`;
-  const headers = {
-    'Authorization': `Bearer ${cfg.token}`,
-    'Accept': 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28',
-    'Content-Type': 'application/json'
-  };
-
-  try {
-    // Step 1: Fetch current blob SHA via GET /repos/{owner}/{repo}/contents/{path}
-    let currentSha = null;
-    const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(cfg.branch)}&t=${Date.now()}`, { headers });
-
-    if (getRes.ok) {
-      const fileMeta = await getRes.json();
-      currentSha = fileMeta.sha;
-    } else if (getRes.status !== 404) {
-      const errData = await getRes.json().catch(() => ({}));
-      throw new Error(errData.message || `GET failed (${getRes.status})`);
+        container.innerHTML = html;
+        this.bindDynamicInteractiveElements();
     }
 
-    // Step 2: Update timestamp & encode payload safely in UTF-8 Base64
-    appData.lastUpdated = new Date().toISOString().split('T')[0];
-    const jsonString = JSON.stringify(appData, null, 2);
-    const base64Content = utf8ToBase64(jsonString);
+    bindDynamicInteractiveElements() {
+        // Checkboxes state save
+        const checkboxes = document.querySelectorAll('.drill-checkbox');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                const checkId = e.target.getAttribute('data-check-id');
+                localStorage.setItem(checkId, e.target.checked);
+                const titleEl = e.target.closest('div').querySelector('h4');
+                if (e.target.checked) {
+                    titleEl.classList.add('line-through', 'text-slate-400');
+                } else {
+                    titleEl.classList.remove('line-through', 'text-slate-400');
+                }
+            });
+        });
 
-    // Step 3: Commit overwrite via PUT /repos/{owner}/{repo}/contents/{path}
-    const putBody = {
-      message: `Update lacrosse training plan (${appData.lastUpdated})`,
-      content: base64Content,
-      branch: cfg.branch
-    };
-    if (currentSha) {
-      putBody.sha = currentSha;
+        // Timer buttons
+        const startBtns = document.querySelectorAll('.btn-start-timer');
+        startBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const dayIdx = e.target.getAttribute('data-day');
+                const phaseIdx = e.target.getAttribute('data-phase');
+                const mins = parseInt(e.target.getAttribute('data-mins'));
+                this.startTimer(dayIdx, phaseIdx, mins);
+            });
+        });
+
+        const resetBtns = document.querySelectorAll('.btn-reset-timer');
+        resetBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const dayIdx = e.target.getAttribute('data-day');
+                const phaseIdx = e.target.getAttribute('data-phase');
+                const mins = parseInt(e.target.getAttribute('data-mins'));
+                this.resetTimer(dayIdx, phaseIdx, mins);
+            });
+        });
     }
 
-    const putRes = await fetch(apiUrl, {
-      method: 'PUT',
-      headers,
-      body: JSON.stringify(putBody)
-    });
+    startTimer(dayIdx, phaseIdx, totalMins) {
+        const timerKey = `${dayIdx}-${phaseIdx}`;
+        if (this.timers[timerKey]) {
+            clearInterval(this.timers[timerKey]);
+        }
 
-    if (!putRes.ok) {
-      const errData = await putRes.json().catch(() => ({}));
-      throw new Error(errData.message || `PUT failed (${putRes.status})`);
+        let totalSeconds = totalMins * 60;
+        const displayEl = document.querySelector(`[data-timer-id="timer-${timerKey}"]`);
+        if (!displayEl) return;
+
+        this.timers[timerKey] = setInterval(() => {
+            if (totalSeconds <= 0) {
+                clearInterval(this.timers[timerKey]);
+                displayEl.textContent = "00:00";
+                displayEl.classList.remove('text-amber-400', 'animate-pulse');
+                displayEl.classList.add('text-emerald-400');
+                return;
+            }
+
+            totalSeconds--;
+            const m = Math.floor(totalSeconds / 60);
+            const s = totalSeconds % 60;
+            displayEl.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+            // Visual flashing indicator when final countdown seconds (e.g. <= 10 seconds)
+            if (totalSeconds <= 10) {
+                displayEl.classList.add('text-red-400', 'animate-pulse');
+            } else if (totalSeconds <= 30) {
+                displayEl.classList.add('text-amber-400');
+            }
+        }, 1000);
     }
 
-    hasUnsavedChanges = false;
-    document.getElementById('unsaved-badge').classList.add('hidden');
-    showToast('✅ Published directly to GitHub! Live site updates within ~30–60s.');
-  } catch (err) {
-    console.error('GitHub Publish Error:', err);
-    showToast(`GitHub Sync Failed: ${err.message}`, true);
-  } finally {
-    publishBtn.disabled = false;
-    publishBtn.textContent = originalText;
-  }
+    resetTimer(dayIdx, phaseIdx, totalMins) {
+        const timerKey = `${dayIdx}-${phaseIdx}`;
+        if (this.timers[timerKey]) {
+            clearInterval(this.timers[timerKey]);
+        }
+        const displayEl = document.querySelector(`[data-timer-id="timer-${timerKey}"]`);
+        if (displayEl) {
+            displayEl.textContent = `${totalMins}:00`;
+            displayEl.classList.remove('text-red-400', 'animate-pulse', 'text-amber-400', 'text-emerald-400');
+            displayEl.classList.add('text-blue-400');
+        }
+    }
+
+    // GitHub Sync Settings & Modal
+    populateSyncModalFields() {
+        document.getElementById('sync-owner').value = this.githubConfig.owner || '';
+        document.getElementById('sync-repo').value = this.githubConfig.repo || '';
+        document.getElementById('sync-branch').value = this.githubConfig.branch || 'main';
+        document.getElementById('sync-path').value = this.githubConfig.path || 'data.json';
+        document.getElementById('sync-token').value = this.githubConfig.token || '';
+    }
+
+    saveSyncSettingsFromModal() {
+        this.githubConfig.owner = document.getElementById('sync-owner').value.trim();
+        this.githubConfig.repo = document.getElementById('sync-repo').value.trim();
+        this.githubConfig.branch = document.getElementById('sync-branch').value.trim() || 'main';
+        this.githubConfig.path = document.getElementById('sync-path').value.trim() || 'data.json';
+        this.githubConfig.token = document.getElementById('sync-token').value.trim();
+
+        this.saveGitHubConfig();
+        this.checkAuthVisibility();
+        this.updateSyncStatusIndicator();
+
+        const msg = document.getElementById('sync-msg');
+        msg.textContent = "GitHub settings saved successfully!";
+        msg.className = "text-xs font-medium text-center text-emerald-400";
+        msg.classList.remove('hidden');
+
+        setTimeout(() => {
+            msg.classList.add('hidden');
+            document.getElementById('modal-sync').classList.add('hidden');
+        }, 1500);
+    }
+
+    clearGitHubAuth() {
+        if (confirm("Are you sure you want to clear your GitHub credentials? Admin edit controls will be locked.")) {
+            this.githubConfig.token = '';
+            this.saveGitHubConfig();
+            this.checkAuthVisibility();
+            this.updateSyncStatusIndicator();
+            document.getElementById('sync-token').value = '';
+            document.getElementById('modal-sync').classList.add('hidden');
+            alert("Credentials cleared. Edit mode locked.");
+        }
+    }
+
+    async testGitHubConnection() {
+        const owner = document.getElementById('sync-owner').value.trim();
+        const repo = document.getElementById('sync-repo').value.trim();
+        const token = document.getElementById('sync-token').value.trim();
+        const path = document.getElementById('sync-path').value.trim() || 'data.json';
+        const branch = document.getElementById('sync-branch').value.trim() || 'main';
+
+        const msg = document.getElementById('sync-msg');
+        msg.textContent = "Testing connection to GitHub...";
+        msg.className = "text-xs font-medium text-center text-blue-400";
+        msg.classList.remove('hidden');
+
+        try {
+            const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
+            const res = await fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (!res.ok) {
+                throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+            }
+
+            msg.textContent = "Connection successful! Repository and file verified.";
+            msg.className = "text-xs font-medium text-center text-emerald-400";
+        } catch (err) {
+            console.error(err);
+            msg.textContent = `Connection failed: ${err.message}`;
+            msg.className = "text-xs font-medium text-center text-red-400";
+        }
+    }
+
+    updateSyncStatusIndicator() {
+        const indicator = document.getElementById('sync-status-indicator');
+        if (this.githubConfig.token && this.githubConfig.token.trim() !== '') {
+            indicator.className = "w-2 h-2 rounded-full bg-emerald-500 inline-block ml-1 shadow-sm shadow-emerald-500";
+        } else {
+            indicator.className = "w-2 h-2 rounded-full bg-slate-500 inline-block ml-1";
+        }
+    }
+
+    // In-Browser Schedule & Drill Editor
+    openEditorModal() {
+        const select = document.getElementById('editor-day-select');
+        select.innerHTML = '';
+        const profile = this.getActiveProfile();
+        if (!profile || !profile.schedule) return;
+
+        profile.schedule.forEach((day, idx) => {
+            const opt = document.createElement('option');
+            opt.value = idx;
+            opt.textContent = `${day.day} - ${day.title}`;
+            select.appendChild(opt);
+        });
+
+        this.renderEditorFormForDay(0);
+        document.getElementById('modal-editor').classList.remove('hidden');
+    }
+
+    renderEditorFormForDay(dayIndex) {
+        const container = document.getElementById('editor-body-container');
+        container.innerHTML = '';
+        const profile = this.getActiveProfile();
+        if (!profile || !profile.schedule) return;
+
+        const day = profile.schedule[dayIndex];
+        if (!day) return;
+
+        let html = `
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Day Title</label>
+                        <input type="text" id="edit-day-title" value="${day.title}" class="w-full bg-slate-900 border border-cardBorder rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Focus Area</label>
+                        <input type="text" id="edit-day-focus" value="${day.focus}" class="w-full bg-slate-900 border border-cardBorder rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Badge Text</label>
+                        <input type="text" id="edit-day-badge" value="${day.badge || ''}" class="w-full bg-slate-900 border border-cardBorder rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="flex items-center pt-6">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="edit-day-lowimpact" ${day.isLowImpact ? 'checked' : ''} class="w-4 h-4 rounded bg-slate-900 border-slate-700 text-blue-600 focus:ring-blue-500">
+                            <span class="text-xs font-semibold text-slate-300">Is Low-Impact / Basketball Night</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-800 pt-4 space-y-4">
+                    <h4 class="font-bold text-sm text-slate-200">Daily Phases & Drills</h4>
+        `;
+
+        day.phases.forEach((phase, pIdx) => {
+            html += `
+                <div class="bg-slate-900/80 border border-cardBorder rounded-xl p-4 space-y-3 phase-editor-card" data-phase-index="${pIdx}">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-blue-400">Phase ${phase.phaseNumber}</span>
+                        <div class="flex items-center gap-2">
+                            <label class="text-xs text-slate-400">Duration (Mins):</label>
+                            <input type="number" class="phase-duration-input w-20 bg-slate-800 border border-cardBorder rounded px-2 py-1 text-xs text-slate-100 focus:outline-none focus:border-blue-500" value="${phase.durationMins}" data-p-idx="${pIdx}">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Phase Title</label>
+                        <input type="text" class="phase-title-input w-full bg-slate-800 border border-cardBorder rounded px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500" value="${phase.title}" data-p-idx="${pIdx}">
+                    </div>
+
+                    <div class="space-y-2 pt-2">
+                        <div class="text-[11px] font-bold text-slate-400 uppercase">Drills</div>
+            `;
+
+            phase.drills.forEach((drill, dIdx) => {
+                html += `
+                    <div class="bg-cardBg border border-cardBorder/60 rounded-lg p-3 space-y-2 drill-item-row" data-d-idx="${dIdx}">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <div class="sm:col-span-2">
+                                <label class="block text-[10px] text-slate-400">Drill Title</label>
+                                <input type="text" class="drill-title-input w-full bg-slate-900 border border-cardBorder rounded px-2.5 py-1 text-xs text-slate-100 focus:outline-none focus:border-blue-500" value="${drill.title}">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-400">Reps / Target</label>
+                                <input type="text" class="drill-reps-input w-full bg-slate-900 border border-cardBorder rounded px-2.5 py-1 text-xs text-slate-100 focus:outline-none focus:border-blue-500" value="${drill.reps}">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] text-slate-400">Rest Interval</label>
+                                <input type="text" class="drill-rest-input w-full bg-slate-900 border border-cardBorder rounded px-2.5 py-1 text-xs text-slate-100 focus:outline-none focus:border-blue-500" value="${drill.rest}">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-400">Coaching Cues</label>
+                                <input type="text" class="drill-cues-input w-full bg-slate-900 border border-cardBorder rounded px-2.5 py-1 text-xs text-slate-100 focus:outline-none focus:border-blue-500" value="${drill.cues}">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `
+                </div>
+            </div>
+        `;
+
+        container.innerHTML = html;
+        this.updateEditorValidationBadge();
+
+        // Listen for input changes to validate live duration totals
+        container.querySelectorAll('.phase-duration-input').forEach(input => {
+            input.addEventListener('input', () => this.updateEditorValidationBadge());
+        });
+    }
+
+    updateEditorValidationBadge() {
+        const profile = this.getActiveProfile();
+        const durationInputs = document.querySelectorAll('.phase-duration-input');
+        let total = 0;
+        durationInputs.forEach(inp => {
+            total += parseInt(inp.value) || 0;
+        });
+
+        const badge = document.getElementById('editor-validation-badge');
+        if (total > profile.targetCapMins) {
+            badge.textContent = `Total Duration: ${total} Mins (Exceeds ${profile.targetCapMins}m Cap!)`;
+            badge.className = "text-xs px-3 py-1.5 rounded-lg font-medium bg-red-950 text-red-300 border border-red-800";
+        } else {
+            badge.textContent = `Total Duration: ${total} / ${profile.targetCapMins} Mins (Valid)`;
+            badge.className = "text-xs px-3 py-1.5 rounded-lg font-medium bg-emerald-950 text-emerald-300 border border-emerald-800";
+        }
+    }
+
+    collectEditorFormData() {
+        const dayIndex = parseInt(document.getElementById('editor-day-select').value);
+        const profile = this.getActiveProfile();
+        if (!profile || !profile.schedule) return;
+
+        const day = profile.schedule[dayIndex];
+        day.title = document.getElementById('edit-day-title').value.trim();
+        day.focus = document.getElementById('edit-day-focus').value.trim();
+        day.badge = document.getElementById('edit-day-badge').value.trim();
+        day.isLowImpact = document.getElementById('edit-day-lowimpact').checked;
+
+        const phaseCards = document.querySelectorAll('.phase-editor-card');
+        phaseCards.forEach(card => {
+            const pIdx = parseInt(card.getAttribute('data-phase-index'));
+            const phase = day.phases[pIdx];
+            phase.durationMins = parseInt(card.querySelector('.phase-duration-input').value) || 0;
+            phase.title = card.querySelector('.phase-title-input').value.trim();
+
+            const drillRows = card.querySelectorAll('.drill-item-row');
+            drillRows.forEach(row => {
+                const dIdx = parseInt(row.getAttribute('data-d-idx'));
+                const drill = phase.drills[dIdx];
+                drill.title = row.querySelector('.drill-title-input').value.trim();
+                drill.reps = row.querySelector('.drill-reps-input').value.trim();
+                drill.rest = row.querySelector('.drill-rest-input').value.trim();
+                drill.cues = row.querySelector('.drill-cues-input').value.trim();
+            });
+        });
+
+        // Save locally immediately
+        localStorage.setItem('lax_plan_data_' + this.activeProfileId, JSON.stringify(this.data));
+    }
+
+    async publishToGitHub() {
+        this.collectEditorFormData();
+
+        if (!this.githubConfig.token || !this.githubConfig.owner || !this.githubConfig.repo) {
+            alert("GitHub credentials are missing or incomplete. Please configure them in the Admin Sync Settings first.");
+            document.getElementById('modal-editor').classList.add('hidden');
+            document.getElementById('modal-sync').classList.remove('hidden');
+            return;
+        }
+
+        const publishBtn = document.getElementById('btn-publish-github');
+        const originalText = publishBtn.innerHTML;
+        publishBtn.innerHTML = `Publishing...`;
+        publishBtn.disabled = true;
+
+        try {
+            const { owner, repo, branch, path, token } = this.githubConfig;
+            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+            // 1. Get current file SHA
+            const getRes = await fetch(`${apiUrl}?ref=${branch}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (!getRes.ok) {
+                throw new Error(`Failed to retrieve file SHA from GitHub: ${getRes.status}`);
+            }
+
+            const fileData = await getRes.json();
+            const sha = fileData.sha;
+
+            // 2. UTF-8 Safe Base64 Encoding
+            const updatedJsonString = JSON.stringify(this.data, null, 2);
+            const base64Content = btoa(unescape(encodeURIComponent(updatedJsonString)));
+
+            // 3. PUT Request to overwrite data.json
+            const putRes = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Update schedule & drills via browser admin editor (${new Date().toISOString()})`,
+                    content: base64Content,
+                    sha: sha,
+                    branch: branch
+                })
+            });
+
+            if (!putRes.ok) {
+                const errJson = await putRes.json();
+                throw new Error(`GitHub commit failed: ${errJson.message || putRes.statusText}`);
+            }
+
+            alert("Successfully published updated schedule & drills directly to GitHub repository data.json!");
+            document.getElementById('modal-editor').classList.add('hidden');
+            this.render();
+
+        } catch (err) {
+            console.error(err);
+            alert(`Publishing failed: ${err.message}`);
+        } finally {
+            publishBtn.innerHTML = originalText;
+            publishBtn.disabled = false;
+        }
+    }
 }
 
-// ============================================================================
-// 7. WINDOWS-OPTIMIZED SMS LINK LAUNCHER & CLIPBOARD FALLBACK
-// ============================================================================
-
-function getDeepLinkUrl() {
-  return `${window.location.origin}${window.location.pathname}?profile=${encodeURIComponent(activeProfileId)}`;
-}
-
-function launchSmsUpdate() {
-  const livePlanUrl = getDeepLinkUrl();
-  const payload = `Updated Plan: ${livePlanUrl}`;
-  window.location.href = 'sms:?&body=' + encodeURIComponent(payload);
-}
-
-async function copyDeepLink() {
-  const livePlanUrl = getDeepLinkUrl();
-  try {
-    await navigator.clipboard.writeText(livePlanUrl);
-    showToast('Direct profile link copied to clipboard!');
-  } catch {
-    prompt('Copy this direct plan link:', livePlanUrl);
-  }
-}
-
-// ============================================================================
-// 8. EVENT BINDINGS & UTILITIES
-// ============================================================================
-
-function bindEvents() {
-  // Profile switching
-  document.getElementById('profile-selector').addEventListener('change', (e) => {
-    activeProfileId = e.target.value;
-    renderAll();
-  });
-
-  // SMS & Copy Link buttons
-  document.getElementById('btn-send-sms').addEventListener('click', launchSmsUpdate);
-  document.getElementById('btn-copy-link').addEventListener('click', copyDeepLink);
-
-  // Admin Bar actions
-  document.getElementById('btn-toggle-impact').addEventListener('click', toggleLowImpactDay);
-  document.getElementById('btn-publish-github').addEventListener('click', publishToGitHub);
-
-  // Drill Modal
-  document.getElementById('drill-form').addEventListener('submit', handleSaveDrill);
-  document.getElementById('btn-close-drill-modal').addEventListener('click', closeDrillModal);
-  document.getElementById('btn-cancel-drill').addEventListener('click', closeDrillModal);
-
-  // Profile Modal
-  document.getElementById('btn-new-profile').addEventListener('click', () => {
-    document.getElementById('profile-modal').classList.remove('hidden');
-  });
-  document.getElementById('profile-form').addEventListener('submit', handleCreateProfile);
-  document.getElementById('btn-close-profile-modal').addEventListener('click', () => {
-    document.getElementById('profile-modal').classList.add('hidden');
-  });
-  document.getElementById('btn-cancel-profile').addEventListener('click', () => {
-    document.getElementById('profile-modal').classList.add('hidden');
-  });
-
-  // GitHub Settings Modal
-  document.getElementById('btn-open-github-modal').addEventListener('click', () => {
-    const cfg = getGhConfig();
-    document.getElementById('gh-owner').value = cfg.owner;
-    document.getElementById('gh-repo').value = cfg.repo;
-    document.getElementById('gh-branch').value = cfg.branch;
-    document.getElementById('gh-path').value = cfg.path;
-    document.getElementById('gh-token').value = cfg.token;
-    document.getElementById('github-modal').classList.remove('hidden');
-  });
-
-  document.getElementById('github-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const cfg = {
-      owner: document.getElementById('gh-owner').value.trim(),
-      repo: document.getElementById('gh-repo').value.trim(),
-      branch: document.getElementById('gh-branch').value.trim() || 'main',
-      path: document.getElementById('gh-path').value.trim() || 'data.json',
-      token: document.getElementById('gh-token').value.trim()
-    };
-    localStorage.setItem(STORAGE_KEYS.GH_CONFIG, JSON.stringify(cfg));
-    applyRoleVisibility();
-    document.getElementById('github-modal').classList.add('hidden');
-    showToast(cfg.token ? 'Admin credentials saved locally.' : 'Saved without token (Public View Mode).');
-  });
-
-  document.getElementById('btn-logout-github').addEventListener('click', () => {
-    const cfg = getGhConfig();
-    cfg.token = '';
-    localStorage.setItem(STORAGE_KEYS.GH_CONFIG, JSON.stringify(cfg));
-    document.getElementById('gh-token').value = '';
-    applyRoleVisibility();
-    document.getElementById('github-modal').classList.add('hidden');
-    showToast('Token cleared. Switched to Public Read-Only Mode.');
-  });
-
-  document.getElementById('btn-close-github-modal').addEventListener('click', () => {
-    document.getElementById('github-modal').classList.add('hidden');
-  });
-  document.getElementById('btn-cancel-github').addEventListener('click', () => {
-    document.getElementById('github-modal').classList.add('hidden');
-  });
-}
-
-let toastTimeout = null;
-function showToast(message, isError = false) {
-  const toast = document.getElementById('toast');
-  toast.textContent = message;
-  toast.className = `fixed bottom-5 right-5 z-50 text-sm font-medium px-4 py-3 rounded-xl shadow-lg border transition-opacity ${
-    isError
-      ? 'bg-rose-950 text-rose-100 border-rose-700'
-      : 'bg-slate-900 text-white border-slate-700'
-  }`;
-  toast.classList.remove('hidden');
-
-  if (toastTimeout) clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(() => {
-    toast.classList.add('hidden');
-  }, 4200);
-}
-
-function escapeHtml(str) {
-  if (str === null || str === undefined) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
+// Initialize application on DOM content load
+document.addEventListener('DOMContentLoaded', () => {
+    window.laxApp = new LaxPlannerApp();
+});
