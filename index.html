@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lacrosse Practice & Training Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Role-Based UI Visibility: Hidden by default until GitHub token is verified in localStorage */
+    body:not(.is-admin) .admin-only {
+      display: none !important;
+    }
+    /* Custom scrollbar for horizontal day tabs on mobile */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col font-sans antialiased">
+
+  <!-- Top Navigation & Profile Header -->
+  <header class="bg-slate-900 text-white shadow-md sticky top-0 z-30">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-slate-950 text-lg shadow-inner">
+          LX
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight leading-tight">Lacrosse Training Hub</h1>
+          <p id="header-subtitle" class="text-xs text-slate-400">45-Minute High-Performance Planner</p>
+        </div>
+      </div>
+
+      <!-- Profile Selector & Action Bar -->
+      <div class="flex flex-wrap items-center gap-2">
+        <select id="profile-selector" aria-label="Select Athlete Profile"
+          class="bg-slate-800 border border-slate-700 text-white text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </select>
+
+        <!-- Admin Only: New Profile -->
+        <button id="btn-new-profile" type="button"
+          class="admin-only bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 text-xs font-medium px-2.5 py-1.5 rounded-lg transition">
+          + Profile
+        </button>
+
+        <!-- Windows-Optimized SMS Update Launcher -->
+        <button id="btn-send-sms" type="button"
+          class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1.5">
+          <span>💬</span> Send Text Update
+        </button>
+
+        <!-- One-Click Copy Link Fallback -->
+        <button id="btn-copy-link" type="button" title="Copy direct link to this profile"
+          class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs sm:text-sm font-medium px-2.5 py-1.5 rounded-lg transition">
+          Copy Link
+        </button>
+      </div>
+    </div>
+
+    <!-- Admin Publish Banner (Visible only when logged in with GitHub PAT) -->
+    <div class="admin-only bg-amber-950/90 border-t border-amber-700/60 px-4 py-2">
+      <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="flex items-center gap-2 text-amber-200">
+          <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span><strong>Admin Mode Active</strong> — Edits stay local until published to GitHub.</span>
+          <span id="unsaved-badge" class="hidden bg-amber-500 text-slate-950 font-bold px-2 py-0.5 rounded uppercase text-[10px]">
+            Unsaved Changes
+          </span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-toggle-impact" type="button"
+            class="bg-slate-800 hover:bg-slate-700 text-amber-200 border border-amber-700/50 px-2.5 py-1 rounded font-medium transition">
+            Toggle Low-Impact Day
+          </button>
+          <button id="btn-publish-github" type="button"
+            class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-3 py-1 rounded shadow transition">
+            Save &amp; Publish to GitHub
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-5 space-y-5">
+
+    <!-- Profile Meta & Joint Safety Banner -->
+    <section class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h2 id="profile-title" class="text-lg font-bold text-slate-900">Loading Profile...</h2>
+          <span id="profile-position-badge" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+            Position
+          </span>
+        </div>
+        <p id="profile-focus" class="text-sm text-slate-600 mt-0.5"></p>
+      </div>
+      <div class="flex items-center gap-3 self-start sm:self-center">
+        <div class="text-right">
+          <div class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Daily Target Cap</div>
+          <div id="profile-cap-display" class="text-sm font-bold text-slate-800">45 Mins</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7-Day Selector Tabs -->
+    <nav aria-label="Weekly Schedule Days" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1" id="day-tabs">
+      <!-- Populated dynamically by app.js -->
+    </nav>
+
+    <!-- Active Day Header & Live Duration Validation -->
+    <section class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 id="day-heading" class="text-xl font-extrabold text-slate-900">Monday</h3>
+            <span id="low-impact-badge" class="hidden text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+              🛡️ Low-Impact / Cross-Training Mode (Phase 2 = 0m)
+            </span>
+          </div>
+          <p id="day-focus-note" class="text-sm text-slate-600 mt-1"></p>
+        </div>
+
+        <!-- Live Duration Counter & Cap Warning -->
+        <div class="flex items-center gap-2 self-start sm:self-center">
+          <div id="duration-pill" class="px-3.5 py-2 rounded-lg border text-sm font-bold flex items-center gap-2">
+            <span>Total: <span id="day-total-mins">0</span> / <span id="day-cap-mins">45</span>m</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cap Exceeded Warning Alert -->
+      <div id="cap-warning-banner" class="hidden mt-3 bg-rose-50 border border-rose-300 text-rose-800 px-3.5 py-2.5 rounded-lg text-xs sm:text-sm flex items-center gap-2">
+        <span class="text-base">⚠️</span>
+        <span><strong>Duration Cap Exceeded:</strong> Today's total workout exceeds the target daily cap. Trim drill minutes or adjust phases to prevent overuse.</span>
+      </div>
+    </section>
+
+    <!-- 4 Timed Phases Container -->
+    <section id="phases-container" class="space-y-4">
+      <!-- Populated dynamically by app.js -->
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" role="status" aria-live="polite"
+    class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white text-sm font-medium px-4 py-3 rounded-xl shadow-lg border border-slate-700 transition-opacity">
+  </div>
+
+  <!-- Footer with Discreet Admin / GitHub Sync Trigger -->
+  <footer class="bg-white border-t border-slate-200 mt-10 py-4 px-4">
+    <div class="max-w-5xl mx-auto flex items-center justify-between text-xs text-slate-400">
+      <span>Lacrosse Practice &amp; Training Planner • Static GitHub Pages Edition</span>
+      <button id="btn-open-github-modal" type="button" title="Admin / GitHub Sync Settings"
+        class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition flex items-center gap-1">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+        <span class="sr-only">Admin Sync</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- MODAL 1: Add / Edit Drill Modal -->
+  <div id="drill-modal" class="fixed inset-0 z-40 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 id="drill-modal-title" class="text-base font-bold text-slate-900">Edit Drill</h3>
+        <button type="button" id="btn-close-drill-modal" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
+      </div>
+      <form id="drill-form" class="space-y-3">
+        <input type="hidden" id="drill-phase-index" />
+        <input type="hidden" id="drill-index" />
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Drill Title</label>
+          <input type="text" id="drill-title" required placeholder="e.g., X-Roll Dodge Execution"
+            class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Duration (mins)</label>
+            <input type="number" id="drill-duration" min="0" max="120" required
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Sets / Reps</label>
+            <input type="text" id="drill-reps" required placeholder="e.g., 3 x 10"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Rest Interval</label>
+            <input type="text" id="drill-rest" placeholder="e.g., 30s rest"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Coaching Cues</label>
+          <textarea id="drill-cues" rows="3" required placeholder="Key mechanical & tactical cues..."
+            class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" id="btn-cancel-drill" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+          <button type="submit" class="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg shadow">Save Drill</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: New Athlete Profile Modal -->
+  <div id="profile-modal" class="fixed inset-0 z-40 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-bold text-slate-900">Create Athlete Profile</h3>
+        <button type="button" id="btn-close-profile-modal" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
+      </div>
+      <form id="profile-form" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Profile Name</label>
+          <input type="text" id="new-profile-name" required placeholder="e.g., Midfield / Transition & Draw"
+            class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Position</label>
+            <input type="text" id="new-profile-position" required placeholder="e.g., Midfield"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Daily Duration Cap (mins)</label>
+            <input type="number" id="new-profile-cap" value="45" min="15" max="120" required
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Primary Focus Area</label>
+          <input type="text" id="new-profile-focus" required placeholder="e.g., Two-way conditioning, draw controls & clearing"
+            class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" id="btn-cancel-profile" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+          <button type="submit" class="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg shadow">Create Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Discreet Admin / GitHub Sync Settings Modal -->
+  <div id="github-modal" class="fixed inset-0 z-40 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-bold text-slate-900">Admin / GitHub Sync Configuration</h3>
+        <button type="button" id="btn-close-github-modal" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
+      </div>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Enter your GitHub repository details and a Fine-Grained Personal Access Token (<strong>Contents: Read &amp; Write</strong>) to enable live in-browser editing and publishing. Credentials are stored strictly in your local browser.
+      </p>
+      <form id="github-form" class="space-y-3">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Repo Owner</label>
+            <input type="text" id="gh-owner" required placeholder="e.g., kuhnsdc"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Repository Name</label>
+            <input type="text" id="gh-repo" required placeholder="e.g., Lax_Workout_plan"
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Branch</label>
+            <input type="text" id="gh-branch" value="main" required
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">JSON File Path</label>
+            <input type="text" id="gh-path" value="data.json" required
+              class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">GitHub Personal Access Token (PAT)</label>
+          <input type="password" id="gh-token" placeholder="github_pat_..."
+            class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+        </div>
+        <div class="flex items-center justify-between pt-2">
+          <button type="button" id="btn-logout-github" class="text-xs font-semibold text-rose-600 hover:underline">
+            Clear Token (Public Mode)
+          </button>
+          <div class="flex gap-2">
+            <button type="button" id="btn-cancel-github" class="px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+            <button type="submit" class="px-4 py-2 text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-lg shadow">Save Credentials</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
