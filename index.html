@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Lacrosse Practice Plan | 45-Min Off-Season</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --card-border: #334155;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-dark: #0284c7;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --bball: #a855f7;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding-bottom: 85px;
+    line-height: 1.45;
+  }
+  header {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: #1e293b;
+    border: 1px solid var(--card-border);
+    color: var(--accent);
+  }
+  .badge.bball { color: #e9d5ff; border-color: #7e22ce; background: rgba(168, 85, 247, 0.15); }
+  .badge.knee { color: #fde68a; border-color: #b45309; background: rgba(245, 158, 11, 0.15); }
+
+  .day-scroller {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 12px 16px;
+    scrollbar-width: none;
+    background: #0b1120;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .day-scroller::-webkit-scrollbar { display: none; }
+  .day-pill {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    border-radius: 12px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: center;
+  }
+  .day-pill.active {
+    background: var(--accent);
+    color: #0f172a;
+    border-color: var(--accent);
+  }
+  .day-pill .dot {
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin: 4px auto 0;
+    background: transparent;
+  }
+  .day-pill.has-bball .dot { background: var(--bball); }
+  .day-pill.active.has-bball .dot { background: #0f172a; }
+
+  main { padding: 14px 16px; max-width: 720px; margin: 0 auto; }
+
+  .day-header-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .day-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .day-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+  .day-note {
+    margin: 8px 0 0;
+    font-size: 0.82rem;
+    color: #e9d5ff;
+    background: rgba(168, 85, 247, 0.14);
+    border-left: 3px solid var(--bball);
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+
+  .action-bar {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 8px 12px;
+    border: 1px solid var(--card-border);
+    background: #0f172a;
+    color: var(--text);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  button:active { transform: scale(0.98); }
+  button.primary {
+    background: var(--accent);
+    color: #0f172a;
+    border-color: var(--accent);
+  }
+  button.sms-btn {
+    background: #16a34a;
+    color: #fff;
+    border-color: #16a34a;
+  }
+  button.edit-active {
+    background: var(--warning);
+    color: #0f172a;
+    border-color: var(--warning);
+  }
+
+  .block-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .block-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .block-title {
+    font-size: 0.98rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .block-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .timer-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #0f172a;
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    flex-shrink: 0;
+  }
+  .timer-display {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-size: 0.95rem;
+    min-width: 46px;
+    text-align: center;
+    color: var(--accent);
+  }
+  .timer-display.running { color: var(--success); }
+  .timer-display.done { color: var(--warning); }
+  .timer-btn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+
+  .drill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .drill-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(15, 23, 42, 0.55);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+  }
+  .drill-item.checked {
+    opacity: 0.6;
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+  .drill-item input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    accent-color: var(--success);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .drill-content { flex: 1; min-width: 0; }
+  .drill-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #fff;
+  }
+  .drill-item.checked .drill-name {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+  .drill-meta {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 2px;
+  }
+  .drill-desc {
+    font-size: 0.82rem;
+    color: #cbd5e1;
+    margin-top: 4px;
+  }
+
+  /* Edit mode inputs */
+  .edit-field {
+    width: 100%;
+    background: #0f172a;
+    color: #fff;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+  .del-drill-btn {
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.4);
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+  .add-drill-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+    border-style: dashed;
+    color: var(--accent);
+  }
+
+  /* Bottom Bar */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.97);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--card-border);
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    z-index: 60;
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 100;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    max-width: 480px;
+    width: 100%;
+    padding: 18px;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .modal h2 { margin: 0 0 8px; font-size: 1.1rem; }
+  .modal p { font-size: 0.85rem; color: var(--muted); margin: 0 0 12px; }
+  .url-box {
+    width: 100%;
+    height: 84px;
+    background: #0f172a;
+    color: var(--accent);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 0.75rem;
+    font-family: monospace;
+    resize: none;
+    margin-bottom: 12px;
+  }
+  .modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .modal-actions button, .modal-actions a {
+    width: 100%;
+    justify-content: center;
+    text-decoration: none;
+    padding: 11px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  .toast {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #22c55e;
+    color: #052e16;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    z-index: 200;
+    display: none;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <h1 id="plan-title">Attack Dev Plan (45m)</h1>
+    <button id="toggle-edit-btn" onclick="toggleEditMode()">✏️ Edit Plan</button>
+  </div>
+  <div class="badge-row">
+    <span class="badge">45 MIN / DAY CAP</span>
+    <span class="badge knee">Knee Brace / Quad Care</span>
+    <span class="badge bball">Tue/Thu Basketball</span>
+  </div>
+</header>
+
+<div class="day-scroller" id="day-scroller"></div>
+
+<main id="main-content"></main>
+
+<div class="bottom-nav">
+  <button onclick="resetSessionChecks()">↺ New Session</button>
+  <button onclick="downloadUpdatedHtml()">⬇ Save Local File</button>
+  <button class="sms-btn" onclick="openShareModal()">💬 Text Update</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Share / SMS Modal -->
+<div class="modal-backdrop" id="share-modal" onclick="if(event.target===this) closeShareModal()">
+  <div class="modal">
+    <h2>Send Plan Update via Text</h2>
+    <p>Updates are compressed directly into the link below. When opened on a phone browser, it automatically loads your edited plan.</p>
+    <textarea class="url-box" id="share-url-box" readonly></textarea>
+    <div class="modal-actions">
+      <a id="sms-deep-link" href="#" class="sms-btn" style="background:#16a34a;color:#fff;">📱 Open Messages App (SMS)</a>
+      <button class="primary" onclick="copyShareLink()">📋 Copy Update Link</button>
+      <button onclick="downloadUpdatedHtml()">💾 Download Updated HTML File</button>
+      <button onclick="closeShareModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Embedded Default Plan Data (Automatically updated when saving local HTML file) -->
+<script id="embedded-plan-data" type="application/json">
+{
+  "title": "Attack Dev Plan (45m)",
+  "athlete": "13yo Elite Club Attack (X, Wings, Crease & Picks)",
+  "days": [
+    {
+      "id": "mon",
+      "short": "Mon",
+      "name": "Monday: X-Dodging & Crease Finishing",
+      "note": "",
+      "bball": false,
+      "blocks": [
+        {
+          "id": "mon-1",
+          "title": "1. Quad Flexibility & Knee-Care Warm-Up",
+          "minutes": 8,
+          "drills": [
+            { "name": "Dynamic Leg Swings", "reps": "2 x 10 / leg", "desc": "Front-to-back & lateral. Open hip flexors smoothly." },
+            { "name": "Kneeling Quad Stretch (Band/Wall)", "reps": "2 x 45s / leg", "desc": "Gently lengthen quadriceps and patellar tendon." },
+            { "name": "A-Skips (Low Impact)", "reps": "2 x 15 yds", "desc": "Soft, controlled, braced landings." }
+          ]
+        },
+        {
+          "id": "mon-2",
+          "title": "2. Joint-Safe Plyometrics & Explosiveness",
+          "minutes": 8,
+          "drills": [
+            { "name": "Broad Jumps to Stick Landing", "reps": "3 x 5 reps (30s rest)", "desc": "Land softly with bent knees over toes; avoid knee valgus." },
+            { "name": "Lateral Line Hops / Skater Steps", "reps": "3 x 20s (30s rest)", "desc": "Side-to-side boundary bounding with controlled deceleration." }
+          ]
+        },
+        {
+          "id": "mon-3",
+          "title": "3. Attack Stick Work & Finishing",
+          "minutes": 20,
+          "drills": [
+            { "name": "X-Roll Dodge Execution (8m)", "reps": "10 dom / 10 off-hand", "desc": "Dummy at X. Parent feeds from high slot; tight roll dodge & low-corner shot." },
+            { "name": "Crease Quick-Stick Finish (7m)", "reps": "15 total reps", "desc": "Parent feeds from wing/X. Quick-release bounce shot around crease dummy." },
+            { "name": "Pick-and-Roll Separation (5m)", "reps": "10 clean reps", "desc": "Dummy screen at wing, parent trails. Brush tight off screen & explode inside." }
+          ]
+        },
+        {
+          "id": "mon-4",
+          "title": "4. Attack IQ & Tactical Micro-Lesson",
+          "minutes": 9,
+          "drills": [
+            { "name": "Slide Package Read from X", "reps": "9 mins film/chalk talk", "desc": "Visualize early crease slide from X and locate skip pass to weak-side wing." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tue",
+      "short": "Tue",
+      "name": "Tuesday: Low-Impact & Pick Mechanics",
+      "note": "Basketball Night: Kept low-impact to avoid leg overload.",
+      "bball": true,
+      "blocks": [
+        {
+          "id": "tue-1",
+          "title": "1. Quad Flexibility & Knee-Care Warm-Up",
+          "minutes": 8,
+          "drills": [
+            { "name": "Hurdle Trail-Leg Extensions", "reps": "2 x 8 / leg", "desc": "Modified mobility drill for hip/quad range." },
+            { "name": "Standing Quad Stretch (PNF)", "reps": "2 x 30s / leg", "desc": "Contract-relax pattern for quad lengthening." },
+            { "name": "Single-Leg Glute Bridges", "reps": "2 x 10 / leg", "desc": "Activate posterior chain to unload quads." }
+          ]
+        },
+        {
+          "id": "tue-2",
+          "title": "2. Low-Impact Agility & Footwork",
+          "minutes": 7,
+          "drills": [
+            { "name": "Cone Footwork Slalom (No Jumping)", "reps": "3 x 30s", "desc": "Quick-feet rapid steps through 5-cone line; low center of gravity." }
+          ]
+        },
+        {
+          "id": "tue-3",
+          "title": "3. Stick Work: Pick-and-Pop & Wings",
+          "minutes": 20,
+          "drills": [
+            { "name": "Pick-and-Pop Partner Passing (10m)", "reps": "15 right / 15 left", "desc": "Set blind screen on dummy, roll/pop to space, catch under pressure." },
+            { "name": "Wing Drive & Step-Down Shooting (10m)", "reps": "10 reps", "desc": "Sweep hard across top from wing cone, protect stick, timed step-down shot." }
+          ]
+        },
+        {
+          "id": "tue-4",
+          "title": "4. Attack IQ & Tactical Micro-Lesson",
+          "minutes": 10,
+          "drills": [
+            { "name": "Pick-and-Roll Decision Making", "reps": "10 mins", "desc": "Wait for defender to commit over/under screen. Translates to evening basketball." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wed",
+      "short": "Wed",
+      "name": "Wednesday: Wing Dodging & Mid-Range",
+      "note": "",
+      "bball": false,
+      "blocks": [
+        {
+          "id": "wed-1",
+          "title": "1. Quad Flexibility & Knee-Care Warm-Up",
+          "minutes": 8,
+          "drills": [
+            { "name": "Dynamic Frankenstein Walks", "reps": "2 x 15 yds", "desc": "Hamstring/quad dynamic balance." },
+            { "name": "Couch Stretch / Deep Hip Flexor", "reps": "2 x 45s / leg", "desc": "Deep quad and hip flexor release." },
+            { "name": "Lateral Band Shuffles", "reps": "2 x 12 yds", "desc": "Activate glute medius for knee tracking." }
+          ]
+        },
+        {
+          "id": "wed-2",
+          "title": "2. Joint-Safe Plyometrics & Explosiveness",
+          "minutes": 8,
+          "drills": [
+            { "name": "Skater Jumps + 2s Stick Landing", "reps": "3 x 6 / side (30s rest)", "desc": "Stabilize braced knee completely on every landing." },
+            { "name": "Drop Steps to Acceleration", "reps": "3 x 5 reps", "desc": "Quick hip-turn and 5-yard burst away from dummy." }
+          ]
+        },
+        {
+          "id": "wed-3",
+          "title": "3. Attack Stick Work & Finishes",
+          "minutes": 20,
+          "drills": [
+            { "name": "Rocker & Split Dodge Series (10m)", "reps": "8 right / 8 left", "desc": "Dummy at top-left wing. Jab step one way, explode past other, finish on run." },
+            { "name": "High-Wing Roll-Out Shooting (10m)", "reps": "15 total reps", "desc": "Catch on wing from X feed, drive alley, roll away from dummy, rip high-to-low." }
+          ]
+        },
+        {
+          "id": "wed-4",
+          "title": "4. Attack IQ & Tactical Micro-Lesson",
+          "minutes": 9,
+          "drills": [
+            { "name": "Fast-Break Transition Spacing", "reps": "9 mins", "desc": "Recognize when to delay behind X so trailing attack can set settled formation." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thu",
+      "short": "Thu",
+      "name": "Thursday: Low-Impact & Off-Ball IQ",
+      "note": "Basketball Night: Second low-impact day to protect knee joint health.",
+      "bball": true,
+      "blocks": [
+        {
+          "id": "thu-1",
+          "title": "1. Quad Flexibility & Knee-Care Warm-Up",
+          "minutes": 8,
+          "drills": [
+            { "name": "Dynamic Lateral Lunges", "reps": "2 x 8 / leg", "desc": "Controlled groin and quad mobility." },
+            { "name": "Supine Quad & IT Band Stretch", "reps": "2 x 45s / leg", "desc": "Release lateral knee tension." },
+            { "name": "Banded Clamshells", "reps": "2 x 15 / leg", "desc": "Hip stabilizer activation." }
+          ]
+        },
+        {
+          "id": "thu-2",
+          "title": "2. Low-Impact Agility & Footwork",
+          "minutes": 7,
+          "drills": [
+            { "name": "Cone Quick-Feet Deceleration", "reps": "3 x 30s", "desc": "Controlled plant-and-stops without hard joint impact." }
+          ]
+        },
+        {
+          "id": "thu-3",
+          "title": "3. Stick Work: Off-Ball & Quick Hands",
+          "minutes": 20,
+          "drills": [
+            { "name": "Cutter Timing & Catch-and-Shoot (10m)", "reps": "20 total reps", "desc": "Cut off dummy screen into 8m arc from X feed; release under 0.5s." },
+            { "name": "Off-Hand Partner Exchange (10m)", "reps": "100 clean passes", "desc": "Non-dominant hand quick-stick passing with parent." }
+          ]
+        },
+        {
+          "id": "thu-4",
+          "title": "4. Attack IQ & Tactical Micro-Lesson",
+          "minutes": 10,
+          "drills": [
+            { "name": "Crease Spatial Awareness", "reps": "10 mins", "desc": "Find blind spots of sliding defenders when X-attacker drives baseline." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fri",
+      "short": "Fri",
+      "name": "Friday: Quarterbacking X & Re-Defending",
+      "note": "",
+      "bball": false,
+      "blocks": [
+        {
+          "id": "fri-1",
+          "title": "1. Quad Flexibility & Knee-Care Warm-Up",
+          "minutes": 8,
+          "drills": [
+            { "name": "Dynamic High Knees & Butt Kicks", "reps": "2 x 15 yds", "desc": "Warm up quads and hamstrings smoothly." },
+            { "name": "Kneeling Couch Stretch", "reps": "2 x 45s / leg", "desc": "Lengthen hip flexors and quads." },
+            { "name": "Ankle Mobility Rocks", "reps": "2 x 10 / leg", "desc": "Improve shock absorption up the kinetic chain." }
+          ]
+        },
+        {
+          "id": "fri-2",
+          "title": "2. Joint-Safe Plyometrics & Explosiveness",
+          "minutes": 8,
+          "drills": [
+            { "name": "Single-Leg Pogo Hops (Low Amp)", "reps": "3 x 20s / leg (30s rest)", "desc": "Build lower-leg tendon stiffness safely." },
+            { "name": "Resisted First-Step Band Sprints", "reps": "3 x 5 reps", "desc": "5-yard max bursts against band tension." }
+          ]
+        },
+        {
+          "id": "fri-3",
+          "title": "3. Attack Stick Work & Finishes",
+          "minutes": 20,
+          "drills": [
+            { "name": "Quarterbacking from X (10m)", "reps": "15 targeted feeds", "desc": "Operate behind goal, feed cutters off screens, use deceptive look-offs." },
+            { "name": "Crease Dive / Tough Angle Finishes (10m)", "reps": "12 reps", "desc": "Absorb light pad contact from parent and finish across goal face." }
+          ]
+        },
+        {
+          "id": "fri-4",
+          "title": "4. Attack IQ & Tactical Micro-Lesson",
+          "minutes": 9,
+          "drills": [
+            { "name": "Riding & Re-Defending Tactics", "reps": "9 mins", "desc": "Dictate clearing lanes, trap goalie/defender, and force outlet errors." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sat",
+      "short": "Sat",
+      "name": "Saturday: High-Intensity Simulation",
+      "note": "",
+      "bball": false,
+      "blocks": [
+        {
+          "id": "sat-1",
+          "title": "1. Quad Flexibility & Knee-Care Warm-Up",
+          "minutes": 8,
+          "drills": [
+            { "name": "Dynamic Leg Swings & Torso Twists", "reps": "2 x 10 reps", "desc": "Full-body rotational & hip prep." },
+            { "name": "Standing Quad & Hip Flexor Routine", "reps": "2 x 45s", "desc": "Dynamic quad lengthening." }
+          ]
+        },
+        {
+          "id": "sat-2",
+          "title": "2. Joint-Safe Plyometrics & Explosiveness",
+          "minutes": 8,
+          "drills": [
+            { "name": "Broad Jump to Multi-Directional Cut", "reps": "3 x 5 reps (45s rest)", "desc": "Land softly, plant instantly, shuffle 3 yards left or right." }
+          ]
+        },
+        {
+          "id": "sat-3",
+          "title": "3. Attack Stick Work & Game Circuits",
+          "minutes": 20,
+          "drills": [
+            { "name": "Full-Sequence Attack Circuit (12m)", "reps": "6 left / 6 right (1m rest)", "desc": "Dodge top wing dummy -> feed parent at X -> cut crease screen -> catch & score." },
+            { "name": "Pressure 8-Meter Shooting (8m)", "reps": "10 shots", "desc": "Parent applies light trail stick pressure; deceptive shot placement." }
+          ]
+        },
+        {
+          "id": "sat-4",
+          "title": "4. Attack IQ & Tactical Micro-Lesson",
+          "minutes": 9,
+          "drills": [
+            { "name": "Game Management & Clock Control", "reps": "9 mins", "desc": "Final-minute scenarios: holding ball behind X under pressure, drawing fouls." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sun",
+      "short": "Sun",
+      "name": "Sunday: Active Recovery & Restoration",
+      "note": "Recovery Day: Reset lower limbs, lengthen quads, protect braced knee.",
+      "bball": false,
+      "blocks": [
+        {
+          "id": "sun-1",
+          "title": "1. Deep Quad & Lower Body Stretching",
+          "minutes": 20,
+          "drills": [
+            { "name": "Supine Quad Stretch", "reps": "3 x 60s", "desc": "Heels to glutes, gentle continuous tension." },
+            { "name": "Half-Kneeling Psoas & Quad Stretch", "reps": "3 x 45s / leg", "desc": "Deep hip and quad lengthening." },
+            { "name": "Hamstring, Calf & Figure-4 Flushes", "reps": "7 mins total", "desc": "Relieve hip tension pulling on IT band and knee." }
+          ]
+        },
+        {
+          "id": "sun-2",
+          "title": "2. Low-Intensity Stick Work & Hands",
+          "minutes": 15,
+          "drills": [
+            { "name": "Stationary Wall-Ball / Parent Toss", "reps": "50 right / 50 left", "desc": "Zero footwork stress. One-hand catching and soft cradling." }
+          ]
+        },
+        {
+          "id": "sun-3",
+          "title": "3. Weekly Review & IQ Reflection",
+          "minutes": 10,
+          "drills": [
+            { "name": "Mental Replay & Notes", "reps": "10 mins", "desc": "Review pick angles, X-dodging timing, and slide reads from the week." }
+          ]
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<script>
+  const STORAGE_KEY = 'lax_plan_data_v1';
+  const CHECKS_KEY = 'lax_plan_checks_v1';
+
+  let planData = null;
+  let activeDayId = 'mon';
+  let editMode = false;
+  let checkedState = {};
+  let timers = {}; // blockId -> { remaining: sec, total: sec, interval: id|null }
+
+  // Unicode-safe Base64 URL encoding/decoding for SMS sharing
+  function encodePlanToHash(obj) {
+    const json = JSON.stringify(obj);
+    const bytes = new TextEncoder().encode(json);
+    let bin = '';
+    bytes.forEach(b => bin += String.fromCharCode(b));
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  function decodePlanFromHash(hashStr) {
+    let b64 = hashStr.replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }
+
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.style.display = 'block';
+    clearTimeout(el._t);
+    el._t = setTimeout(() => { el.style.display = 'none'; }, 2800);
+  }
+
+  function init() {
+    const embedded = JSON.parse(document.getElementById('embedded-plan-data').textContent);
+
+    // 1. Check if opened via an SMS update link (#plan=...)
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#plan=')) {
+      try {
+        const imported = decodePlanFromHash(hash.slice(6));
+        if (imported && Array.isArray(imported.days)) {
+          planData = imported;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(planData));
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+          showToast('Updated plan loaded from link!');
+        }
+      } catch (e) {
+        console.error('Failed to parse plan link', e);
+      }
+    }
+
+    // 2. Otherwise check browser localStorage
+    if (!planData) {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try { planData = JSON.parse(saved); } catch (e) {}
+      }
+    }
+
+    // 3. Fallback to embedded file JSON
+    if (!planData) {
+      planData = embedded;
+    }
+
+    // Load active session checkboxes
+    try {
+      checkedState = JSON.parse(localStorage.getItem(CHECKS_KEY) || '{}');
+    } catch (e) {
+      checkedState = {};
+    }
+
+    // Auto-select today's day of week if valid
+    const dayMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+    const todayId = dayMap[new Date().getDay()];
+    if (planData.days.some(d => d.id === todayId)) {
+      activeDayId = todayId;
+    }
+
+    renderAll();
+  }
+
+  function savePlanToStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(planData));
+  }
+
+  function saveChecksToStorage() {
+    localStorage.setItem(CHECKS_KEY, JSON.stringify(checkedState));
+  }
+
+  function toggleEditMode() {
+    editMode = !editMode;
+    const btn = document.getElementById('toggle-edit-btn');
+    if (editMode) {
+      btn.textContent = '✓ Done Editing';
+      btn.classList.add('edit-active');
+      showToast('Edit Mode: Tap any drill or time to customize');
+    } else {
+      btn.textContent = '✏️ Edit Plan';
+      btn.classList.remove('edit-active');
+      savePlanToStorage();
+      showToast('Changes saved to browser');
+    }
+    renderAll();
+  }
+
+  function resetSessionChecks() {
+    checkedState = {};
+    saveChecksToStorage();
+    Object.keys(timers).forEach(k => {
+      if (timers[k].interval) clearInterval(timers[k].interval);
+    });
+    timers = {};
+    renderAll();
+    showToast('New session started — checkboxes & timers reset');
+  }
+
+  function renderAll() {
+    document.getElementById('plan-title').textContent = planData.title || 'Attack Dev Plan (45m)';
+    renderDayScroller();
+    renderActiveDay();
+  }
+
+  function renderDayScroller() {
+    const scroller = document.getElementById('day-scroller');
+    scroller.innerHTML = '';
+    planData.days.forEach(day => {
+      const btn = document.createElement('button');
+      btn.className = 'day-pill' + (day.id === activeDayId ? ' active' : '') + (day.bball ? ' has-bball' : '');
+      btn.innerHTML = `${escapeHtml(day.short)}<span class="dot"></span>`;
+      btn.onclick = () => {
+        activeDayId = day.id;
+        renderAll();
+      };
+      scroller.appendChild(btn);
+    });
+  }
+
+  function formatSeconds(sec) {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  function toggleTimer(blockId, defaultMins) {
+    if (!timers[blockId]) {
+      timers[blockId] = { remaining: defaultMins * 60, total: defaultMins * 60, interval: null };
+    }
+    const t = timers[blockId];
+    if (t.interval) {
+      clearInterval(t.interval);
+      t.interval = null;
+    } else {
+      if (t.remaining <= 0) t.remaining = defaultMins * 60;
+      t.interval = setInterval(() => {
+        t.remaining--;
+        if (t.remaining <= 0) {
+          t.remaining = 0;
+          clearInterval(t.interval);
+          t.interval = null;
+          if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        }
+        updateTimerDOM(blockId);
+      }, 1000);
+    }
+    updateTimerDOM(blockId);
+  }
+
+  function resetTimer(blockId, defaultMins) {
+    if (timers[blockId] && timers[blockId].interval) {
+      clearInterval(timers[blockId].interval);
+    }
+    timers[blockId] = { remaining: defaultMins * 60, total: defaultMins * 60, interval: null };
+    updateTimerDOM(blockId);
+  }
+
+  function updateTimerDOM(blockId) {
+    const disp = document.getElementById(`timer-disp-${blockId}`);
+    const btn = document.getElementById(`timer-btn-${blockId}`);
+    if (!disp || !btn) return;
+    const t = timers[blockId];
+    disp.textContent = formatSeconds(t.remaining);
+    disp.className = 'timer-display' + (t.interval ? ' running' : (t.remaining === 0 ? ' done' : ''));
+    btn.textContent = t.interval ? 'Pause' : (t.remaining === 0 ? 'Done' : 'Start');
+  }
+
+  function renderActiveDay() {
+    const main = document.getElementById('main-content');
+    const dayIndex = planData.days.findIndex(d => d.id === activeDayId);
+    const day = planData.days[dayIndex];
+    if (!day) return;
+
+    const totalMins = day.blocks.reduce((acc, b) => acc + (Number(b.minutes) || 0), 0);
+
+    let html = `
+      <div class="day-header-card">
+        <div class="day-title-row">
+          ${editMode
+            ? `<input class="edit-field" value="${escapeAttr(day.name)}" onchange="updateDayField(${dayIndex}, 'name', this.value)">`
+            : `<h2 class="day-title">${escapeHtml(day.name)}</h2>`
+          }
+          <span class="badge" style="flex-shrink:0;${totalMins > 45 ? 'color:#fca5a5;border-color:#ef4444;' : ''}">${totalMins} / 45 MIN</span>
+        </div>
+        ${editMode
+          ? `<input class="edit-field" placeholder="Optional schedule note (e.g., Basketball Night)" value="${escapeAttr(day.note || '')}" onchange="updateDayField(${dayIndex}, 'note', this.value)">`
+          : (day.note ? `<div class="day-note">${escapeHtml(day.note)}</div>` : '')
+        }
+      </div>
+    `;
+
+    day.blocks.forEach((block, bIdx) => {
+      if (!timers[block.id]) {
+        timers[block.id] = { remaining: block.minutes * 60, total: block.minutes * 60, interval: null };
+      }
+      const t = timers[block.id];
+
+      html += `
+        <div class="block-card">
+          <div class="block-top">
+            <div style="flex:1;min-width:0;">
+              ${editMode
+                ? `<input class="edit-field" value="${escapeAttr(block.title)}" onchange="updateBlockField(${dayIndex}, ${bIdx}, 'title', this.value)">
+                   <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+                     <span style="font-size:0.78rem;color:var(--muted);">Minutes:</span>
+                     <input type="number" class="edit-field" style="width:70px;margin-top:0;" value="${block.minutes}" onchange="updateBlockMinutes(${dayIndex}, ${bIdx}, this.value)">
+                   </div>`
+                : `<div class="block-title">${escapeHtml(block.title)}</div>
+                   <div class="block-sub">Target Block: ${block.minutes} mins (Silent Timer)</div>`
+              }
+            </div>
+            ${!editMode ? `
+              <div class="timer-box">
+                <span id="timer-disp-${block.id}" class="timer-display ${t.interval ? 'running' : (t.remaining === 0 ? 'done' : '')}">${formatSeconds(t.remaining)}</span>
+                <button id="timer-btn-${block.id}" class="timer-btn primary" onclick="toggleTimer('${block.id}', ${block.minutes})">${t.interval ? 'Pause' : 'Start'}</button>
+                <button class="timer-btn" onclick="resetTimer('${block.id}', ${block.minutes})">↺</button>
+              </div>
+            ` : ''}
+          </div>
+          <div class="drill-list">
+      `;
+
+      block.drills.forEach((drill, dIdx) => {
+        const checkKey = `${day.id}_${block.id}_${dIdx}`;
+        const isChecked = !!checkedState[checkKey];
+
+        if (editMode) {
+          html += `
+            <div class="drill-item" style="flex-direction:column;gap:6px;">
+              <div style="display:flex;width:100%;gap:6px;align-items:center;">
+                <input class="edit-field" style="margin-top:0;font-weight:700;" value="${escapeAttr(drill.name)}" onchange="updateDrillField(${dayIndex}, ${bIdx}, ${dIdx}, 'name', this.value)">
+                <button class="del-drill-btn" onclick="deleteDrill(${dayIndex}, ${bIdx}, ${dIdx})">✕</button>
+              </div>
+              <input class="edit-field" style="margin-top:0;color:var(--accent);" placeholder="Sets / Reps / Duration" value="${escapeAttr(drill.reps)}" onchange="updateDrillField(${dayIndex}, ${bIdx}, ${dIdx}, 'reps', this.value)">
+              <input class="edit-field" style="margin-top:0;" placeholder="Coaching cues" value="${escapeAttr(drill.desc)}" onchange="updateDrillField(${dayIndex}, ${bIdx}, ${dIdx}, 'desc', this.value)">
+            </div>
+          `;
+        } else {
+          html += `
+            <label class="drill-item ${isChecked ? 'checked' : ''}">
+              <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCheck('${checkKey}')">
+              <div class="drill-content">
+                <div class="drill-name">${escapeHtml(drill.name)}</div>
+                <div class="drill-meta">${escapeHtml(drill.reps)}</div>
+                <div class="drill-desc">${escapeHtml(drill.desc)}</div>
+              </div>
+            </label>
+          `;
+        }
+      });
+
+      if (editMode) {
+        html += `<button class="add-drill-btn" onclick="addDrill(${dayIndex}, ${bIdx})">+ Add Drill to Block</button>`;
+      }
+
+      html += `</div></div>`;
+    });
+
+    main.innerHTML = html;
+  }
+
+  function toggleCheck(key) {
+    checkedState[key] = !checkedState[key];
+    saveChecksToStorage();
+    renderActiveDay();
+  }
+
+  function updateDayField(dayIdx, field, val) {
+    planData.days[dayIdx][field] = val;
+    savePlanToStorage();
+  }
+
+  function updateBlockField(dayIdx, bIdx, field, val) {
+    planData.days[dayIdx].blocks[bIdx][field] = val;
+    savePlanToStorage();
+  }
+
+  function updateBlockMinutes(dayIdx, bIdx, val) {
+    const mins = Math.max(1, parseInt(val, 10) || 5);
+    const block = planData.days[dayIdx].blocks[bIdx];
+    block.minutes = mins;
+    resetTimer(block.id, mins);
+    savePlanToStorage();
+    renderActiveDay();
+  }
+
+  function updateDrillField(dayIdx, bIdx, dIdx, field, val) {
+    planData.days[dayIdx].blocks[bIdx].drills[dIdx][field] = val;
+    savePlanToStorage();
+  }
+
+  function addDrill(dayIdx, bIdx) {
+    planData.days[dayIdx].blocks[bIdx].drills.push({
+      name: 'New Drill',
+      reps: '3 x 10 reps',
+      desc: 'Focus on crisp stick mechanics and controlled knee alignment.'
+    });
+    savePlanToStorage();
+    renderActiveDay();
+  }
+
+  function deleteDrill(dayIdx, bIdx, dIdx) {
+    planData.days[dayIdx].blocks[bIdx].drills.splice(dIdx, 1);
+    savePlanToStorage();
+    renderActiveDay();
+  }
+
+  // Generate self-contained updated HTML file for local saving
+  function downloadUpdatedHtml() {
+    savePlanToStorage();
+    const docClone = document.documentElement.cloneNode(true);
+    // Clean transient UI states in cloned DOM
+    const embeddedScript = docClone.querySelector('#embedded-plan-data');
+    if (embeddedScript) {
+      embeddedScript.textContent = '\n' + JSON.stringify(planData, null, 2) + '\n';
+    }
+    const modal = docClone.querySelector('#share-modal');
+    if (modal) modal.classList.remove('open');
+    const toast = docClone.querySelector('#toast');
+    if (toast) toast.style.display = 'none';
+
+    const fullHtml = '<!DOCTYPE html>\n' + docClone.outerHTML;
+    const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'lacrosse-practice-plan.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Saved updated lacrosse-practice-plan.html');
+  }
+
+  // Build SMS update link with compressed state in URL hash
+  function openShareModal() {
+    savePlanToStorage();
+    const encoded = encodePlanToHash(planData);
+    const baseUrl = window.location.href.split('#')[0];
+    const shareUrl = `${baseUrl}#plan=${encoded}`;
+
+    document.getElementById('share-url-box').value = shareUrl;
+    const smsBody = encodeURIComponent(`Updated Lacrosse Practice Plan (45m): ${shareUrl}`);
+    // Works across iOS and Android SMS handlers
+    document.getElementById('sms-deep-link').href = `sms:?&body=${smsBody}`;
+
+    document.getElementById('share-modal').classList.add('open');
+  }
+
+  function closeShareModal() {
+    document.getElementById('share-modal').classList.remove('open');
+  }
+
+  function copyShareLink() {
+    const box = document.getElementById('share-url-box');
+    box.select();
+    box.setSelectionRange(0, 99999);
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(box.value).then(() => showToast('Update link copied!'));
+    } else {
+      document.execCommand('copy');
+      showToast('Update link copied!');
+    }
+  }
+
+  function escapeHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, m => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[m]));
+  }
+  function escapeAttr(str) {
+    return escapeHtml(str);
+  }
+
+  init();
+</script>
+</body>
+</html>
