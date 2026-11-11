@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mo's High-Performance Off-Season Development Plan</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen selection:bg-brand-500 selection:text-white">
+
+    <!-- App Container -->
+    <div class="max-w-5xl mx-auto px-4 py-6 sm:py-10">
+
+        <!-- Header / Athlete Profile -->
+        <header class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 mb-8 shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="bg-brand-500/20 text-brand-400 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-brand-500/30">
+                            7-Day High-Performance Plan
+                        </span>
+                        <span class="bg-amber-500/20 text-amber-300 text-xs font-semibold px-3 py-1 rounded-full border border-amber-500/30 flex items-center gap-1.5">
+                            <i class="fa-solid fa-clock"></i> 45 Min / Day Cap
+                        </span>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">
+                        Mo's Attack Coaching Card
+                    </h1>
+                    <p class="text-slate-400 text-sm sm:text-base max-w-xl">
+                        Target Athlete: <span class="text-white font-semibold">Marlene</span> | Primary Focus: Knee Care, 8M Power, Crease & Pick Mechanics.
+                    </p>
+                </div>
+
+                <!-- Action Buttons & Quick Stats -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <button onclick="openTimerModal()" class="flex-1 sm:flex-none bg-brand-600 hover:bg-brand-500 text-white font-semibold px-5 py-3 rounded-xl transition shadow-lg shadow-brand-600/30 flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-stopwatch text-base"></i> Workout Timer
+                    </button>
+                    <button onclick="openKneeGuide()" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold px-5 py-3 rounded-xl transition border border-slate-700 flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-shield-heart text-amber-400 text-base"></i> Knee Protocol
+                    </button>
+                    <button onclick="resetWeekProgress()" title="Reset Progress" class="p-3 bg-slate-800 hover:bg-rose-900/40 text-slate-400 hover:text-rose-400 border border-slate-700 hover:border-rose-700/50 rounded-xl transition" aria-label="Reset Progress">
+                        <i class="fa-solid fa-rotate-right text-base"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Weekly Overall Progress Bar -->
+            <div class="mt-8 pt-6 border-t border-slate-800/80">
+                <div class="flex items-center justify-between text-sm mb-2">
+                    <span class="text-slate-400 font-medium">Weekly Completion Progress</span>
+                    <span id="overall-percentage" class="text-brand-400 font-bold">0%</span>
+                </div>
+                <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden p-0.5 border border-slate-700/50">
+                    <div id="overall-progress-bar" class="bg-gradient-to-r from-brand-600 to-brand-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Day Selector Tabs -->
+        <nav class="flex overflow-x-auto pb-3 mb-6 gap-2 no-scrollbar" aria-label="Days of the week">
+            <!-- Tabs injected via JS -->
+        </nav>
+
+        <!-- Main Active Day Card -->
+        <main id="day-view-container" class="space-y-6">
+            <!-- Rendered dynamically -->
+        </main>
+
+    </div>
+
+    <!-- Knee Care & Mobility Reference Modal / Drawer -->
+    <div id="knee-guide-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-brand-500/20 text-brand-400 rounded-xl border border-brand-500/30">
+                        <i class="fa-solid fa-shield-heart text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Daily Knee-Care & Mobility Protocol</h2>
+                        <p class="text-slate-400 text-xs">Mandatory Pre & Post-Workout routine for joint health</p>
+                    </div>
+                </div>
+                <button onclick="closeKneeGuide()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-300">
+                <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800/80">
+                    <h3 class="text-brand-400 font-bold text-base mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-fire text-amber-400"></i> Pre-Workout Warm-Up (8 Mins)
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <span class="bg-brand-500/20 text-brand-300 font-mono text-xs px-2 py-0.5 rounded mt-0.5">0-3m</span>
+                            <div><strong class="text-white">Kneeling Couch Stretch</strong> (30s / leg) + Dynamic Lunges</div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="bg-brand-500/20 text-brand-300 font-mono text-xs px-2 py-0.5 rounded mt-0.5">3-6m</span>
+                            <div><strong class="text-white">15 Leg Swings</strong> (Fwd/Back & Lat) + 10 Squats</div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="bg-brand-500/20 text-brand-300 font-mono text-xs px-2 py-0.5 rounded mt-0.5">6-8m</span>
+                            <div><strong class="text-white">Banded Ankle Mobilizations</strong> + Calf Pumps</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800/80">
+                    <h3 class="text-brand-400 font-bold text-base mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-snowflake text-sky-400"></i> Post-Workout Cool-Down (6-15 Mins)
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-brand-500 mt-1"></i>
+                            <div><strong class="text-white">Standing Quad Stretch</strong> (45s - 60s hold)</div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-brand-500 mt-1"></i>
+                            <div><strong class="text-white">Figure-4 Glute Stretch</strong> (45s - 60s hold)</div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-brand-500 mt-1"></i>
+                            <div><strong class="text-white">Calf & Hamstring Static Lengthening</strong></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex justify-end">
+                <button onclick="closeKneeGuide()" class="bg-slate-800 hover:bg-slate-700 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">
+                    Got it
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Timer Modal -->
+    <div id="timer-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-brand-500/20 text-brand-400 rounded-xl border border-brand-500/30">
+                        <i class="fa-solid fa-stopwatch text-xl"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-white">Workout & Rest Timer</h2>
+                </div>
+                <button onclick="closeTimerModal()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div class="p-6 text-center space-y-6">
+                <div id="timer-display" class="text-6xl font-black font-mono tracking-wider text-brand-400 py-6 bg-slate-950 rounded-2xl border border-slate-800 shadow-inner">
+                    00:30
+                </div>
+
+                <div class="flex justify-center gap-3">
+                    <button onclick="setTimerDuration(30)" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition">30s Rest</button>
+                    <button onclick="setTimerDuration(45)" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition">45s Rest</button>
+                    <button onclick="setTimerDuration(60)" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition">60s Rest</button>
+                    <button onclick="setTimerDuration(180)" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition">3m Block</button>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button id="timer-start-btn" onclick="toggleTimer()" class="flex-1 bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-brand-600/30 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play" id="timer-icon"></i> <span id="timer-btn-text">Start Timer</span>
+                    </button>
+                    <button onclick="resetTimer()" class="px-5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-3.5 rounded-xl transition border border-slate-700">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 border border-brand-500/50 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-300 z-50">
+        <i class="fa-solid fa-circle-check text-brand-400 text-lg"></i>
+        <span id="toast-message" class="text-sm font-medium">Progress updated!</span>
+    </div>
+
+    <!-- Application Logic Script -->
+    <script>
+        // Workout Plan Data Structure based on Mo's Workout PDF
+        const workoutPlan = [
+            {
+                id: 'monday',
+                name: 'Monday',
+                theme: 'X-Dominance & First-Step Explosiveness',
+                badge: 'High Intensity',
+                badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+                sections: [
+                    {
+                        title: '00-08 min: Knee-Care Dynamic Warm-Up',
+                        items: [
+                            { id: 'mon_1', text: 'Kneeling Couch Stretch (30s/leg) + Dynamic Lunges', duration: '3m' },
+                            { id: 'mon_2', text: '15 Leg Swings (Fwd/Back & Lat) + 10 Squats', duration: '3m' },
+                            { id: 'mon_3', text: 'Banded Ankle Mobilizations + Calf Pumps', duration: '2m' }
+                        ]
+                    },
+                    {
+                        title: '08-16 min: Joint-Safe Plyometrics',
+                        items: [
+                            { id: 'mon_4', text: 'Low-Impact Deceleration Drops: 3×5 reps (6" low box, absorb through hips) [Rest 45s]', sets: '3 sets × 5 reps' },
+                            { id: 'mon_5', text: 'Broad Jump to Stick Landing: 3×5 reps (silent, soft landing) [Rest 60s]', sets: '3 sets × 5 reps' }
+                        ]
+                    },
+                    {
+                        title: '16-39 min: Stick Work & 8M Power Shooting',
+                        items: [
+                            { id: 'mon_6', text: '8M Step-Down Power Driving: 24 reps (12R/12L) off X feeds [Rest 30s]', reps: '24 reps (12R/12L)' },
+                            { id: 'mon_7', text: 'Dodging Dummies & Roll-Offs at X: 20 reps/side (Dodge, seal, roll tight to pipe) [Rest 45s]', reps: '20 reps / side' },
+                            { id: 'mon_8', text: 'Off-Hand High-Corner Finishing: 25 reps from weak wing [Rest 30s]', reps: '25 reps' }
+                        ]
+                    },
+                    {
+                        title: '39-45 min: Extended Knee-Care Cool-Down',
+                        items: [
+                            { id: 'mon_9', text: 'Quad & Glute static holds (Standing Quad & Figure-4)', duration: '6m' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'tuesday',
+                name: 'Tuesday',
+                theme: 'Low-Impact Power & Volume Shooting',
+                badge: 'Basketball Night',
+                badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+                sections: [
+                    {
+                        title: '00-08 min: Tissue Prep Warm-Up',
+                        items: [
+                            { id: 'tue_1', text: 'Foam roll quads/calves, walking lunges, hip rotations', duration: '8m' },
+                            { id: 'tue_2', text: 'Plyometrics skipped to preserve joints for basketball practice.', note: 'Joint preservation rule' }
+                        ]
+                    },
+                    {
+                        title: '08-37 min: Low-Impact Stick Work & 8M Power Arc',
+                        items: [
+                            { id: 'tue_3', text: 'Stationary 8M Power Drives: 30 reps (Max rotation into top corners) [Rest 45s]', reps: '30 reps' },
+                            { id: 'tue_4', text: 'Wall Ball / Rebounder Cradling: 125R/125L (quick stick protection) [Rest 30s]', reps: '125R / 125L' },
+                            { id: 'tue_5', text: 'Wing Catch & Shoot: 30 reps on the run off X feed [Rest 45s]', reps: '30 reps' }
+                        ]
+                    },
+                    {
+                        title: '37-45 min: Deep Static Cool-Down',
+                        items: [
+                            { id: 'tue_6', text: '60s holds for quads, hip flexors, calves', duration: '8m' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'wednesday',
+                name: 'Wednesday',
+                theme: 'Wing Play & Pick-and-Roll Mastery',
+                badge: 'High Intensity',
+                badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+                sections: [
+                    {
+                        title: '00-08 min: Knee-Care Warm-Up',
+                        items: [
+                            { id: 'wed_1', text: 'Kneeling lunges, lateral band walks, calf raises', duration: '8m' }
+                        ]
+                    },
+                    {
+                        title: '08-16 min: Joint-Safe Plyometrics',
+                        items: [
+                            { id: 'wed_2', text: 'Lateral Skaters: 3×6 reps/side (Soft, wide lateral bounds) [Rest 45s]', sets: '3 sets × 6 reps/side' },
+                            { id: 'wed_3', text: 'Rotational Deceleration Cuts: 3×5 reps/side (90° plant & drop) [Rest 45s]', sets: '3 sets × 5 reps/side' }
+                        ]
+                    },
+                    {
+                        title: '16-39 min: Stick Work & 8M Power Sweep',
+                        items: [
+                            { id: 'wed_4', text: '8M Sweeping Power Dodge: 20 reps (10R/10L) across fan [Rest 45s]', reps: '20 reps (10R/10L)' },
+                            { id: 'wed_5', text: 'Working Off Picks (W/ Parent): 18 reps (Set pick, curl, quick finish) [Rest 45s]', reps: '18 reps' },
+                            { id: 'wed_6', text: 'Off-Hand Wing Dodges: 20 reps (Alley drives & step-away shots) [Rest 30s]', reps: '20 reps' }
+                        ]
+                    },
+                    {
+                        title: '39-45 min: Extended Knee-Care Cool-Down',
+                        items: [
+                            { id: 'wed_7', text: "Runner's lunges & quad foam stretching", duration: '6m' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'thursday',
+                name: 'Thursday',
+                theme: 'Low-Impact Free Position Focus',
+                badge: 'Basketball Night',
+                badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+                sections: [
+                    {
+                        title: '00-08 min: Activation Warm-Up',
+                        items: [
+                            { id: 'thu_1', text: 'Bird-dogs, glute bridges, dynamic leg stretches', duration: '8m' },
+                            { id: 'thu_2', text: 'Plyometrics skipped to protect knees before basketball practice.', note: 'Joint protection rule' }
+                        ]
+                    },
+                    {
+                        title: '08-37 min: Low-Impact Stick Work & 8M Free Position',
+                        items: [
+                            { id: 'thu_3', text: '8M Free Position Hash Drives: 28 reps (Explosive drive off hash) [Rest 30s]', reps: '28 reps' },
+                            { id: 'thu_4', text: 'One-Touch Crease Finishing: 40 reps (Zero wind-up from 8M feeds) [Rest 30s]', reps: '40 reps' },
+                            { id: 'thu_5', text: 'Off-Hand Wall/Rebounder Work: 150 reps high-speed passing [Rest 30s]', reps: '150 reps' }
+                        ]
+                    },
+                    {
+                        title: '37-45 min: Extended Knee-Care Cool-Down',
+                        items: [
+                            { id: 'thu_6', text: 'Static quad, hamstring & hip flexor stretches', duration: '8m' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'friday',
+                name: 'Friday',
+                theme: 'Crease Craft & Tight-Space Power',
+                badge: 'High Intensity',
+                badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+                sections: [
+                    {
+                        title: '00-08 min: Knee-Care Warm-Up',
+                        items: [
+                            { id: 'fri_1', text: 'Couch stretch, agility ladder fast-feet, toe/heel walks', duration: '8m' }
+                        ]
+                    },
+                    {
+                        title: '08-16 min: Joint-Safe Plyometrics',
+                        items: [
+                            { id: 'fri_2', text: 'Drop-Step to Acceleration: 3×6 reps (5yd burst out of turn) [Rest 45s]', sets: '3 sets × 6 reps' },
+                            { id: 'fri_3', text: 'Low-Depth Pogo Hops: 3×10 reps (Stiff ankles, low knee bend) [Rest 45s]', sets: '3 sets × 10 reps' }
+                        ]
+                    },
+                    {
+                        title: '16-39 min: Stick Work & Tight-Space Power',
+                        items: [
+                            { id: 'fri_4', text: '8M Roll-and-Rise Power Shots: 20 reps (Roll dummy, pop to space, blast) [Rest 45s]', reps: '20 reps' },
+                            { id: 'fri_5', text: 'Dodge Dummy Maze at Crease: 18 reps (Fig-8 weave, fake & finish) [Rest 45s]', reps: '18 reps' },
+                            { id: 'fri_6', text: 'Backside Recovery Feeds: 20 reps (Flash across crease low-to-high) [Rest 30s]', reps: '20 reps' }
+                        ]
+                    },
+                    {
+                        title: '39-45 min: Extended Knee-Care Cool-Down',
+                        items: [
+                            { id: 'fri_7', text: 'Quad, hip flexor & glute static holds', duration: '6m' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'saturday',
+                name: 'Saturday',
+                theme: 'Full Simulation & Max-Velocity Shooting',
+                badge: 'High Intensity',
+                badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+                sections: [
+                    {
+                        title: '00-08 min: Warm-Up & Activation',
+                        items: [
+                            { id: 'sat_1', text: 'Walking quad stretches, band monster walks', duration: '8m' }
+                        ]
+                    },
+                    {
+                        title: '08-16 min: Joint-Safe Plyometrics',
+                        items: [
+                            { id: 'sat_2', text: 'Broad Jump to Decel Stick: 3×5 reps [Rest 45s]', sets: '3 sets × 5 reps' },
+                            { id: 'sat_3', text: 'Lateral Skaters: 3×6 reps/side [Rest 45s]', sets: '3 sets × 6 reps/side' }
+                        ]
+                    },
+                    {
+                        title: '16-39 min: Simulation & Max-Velocity Shooting',
+                        items: [
+                            { id: 'sat_4', text: '8M Step-Down Max Power: 24 reps (Full hip load & trunk whip) [Rest 45s]', reps: '24 reps' },
+                            { id: 'sat_5', text: 'The X-to-Wing Circuit: 8 full-speed reps (Dodge X -> Feed -> Dodge Wing)', reps: '8 reps' },
+                            { id: 'sat_6', text: 'High-Pressure Padded Finishing: 15 reps against pad pressure [Rest 30s]', reps: '15 reps' }
+                        ]
+                    },
+                    {
+                        title: '39-45 min: Extended Knee-Care Cool-Down',
+                        items: [
+                            { id: 'sat_7', text: 'Full lower body static flush', duration: '6m' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'sunday',
+                name: 'Sunday',
+                theme: 'Active Recovery & Form Precision',
+                badge: 'Active Recovery',
+                badgeColor: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+                sections: [
+                    {
+                        title: '00-10 min: Light Dynamic Flow & Foam Rolling',
+                        items: [
+                            { id: 'sun_1', text: 'Cat-cow, hip circles, light quad/calf rolling', duration: '10m' }
+                        ]
+                    },
+                    {
+                        title: '10-30 min: Form-Focus 8M Precision Shooting (Zero Jump)',
+                        items: [
+                            { id: 'sun_2', text: '50 Total Reps (25R / 25L): Zero-jump, form-focused power shooting from 8M. Focus on trunk whip, wrist snap, and hitting corners/pipes without joint stress. [Rest 45s]', reps: '50 reps (25R/25L)' }
+                        ]
+                    },
+                    {
+                        title: '30-45 min: Deep Static Recovery Stretch',
+                        items: [
+                            { id: 'sun_3', text: 'Long-hold static stretching for quads, hip flexors, hamstrings, and lower back.', duration: '15m' }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // State Management
+        let currentDayId = 'monday';
+        let completedItems = JSON.parse(localStorage.getItem('mo_workout_progress')) || {};
+
+        // Timer State
+        let timerInterval = null;
+        let timerSeconds = 30;
+        let timerRemaining = 30;
+        let isTimerRunning = false;
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderDayView(currentDayId);
+            updateOverallProgress();
+        });
+
+        // Render Navigation Tabs
+        function renderTabs() {
+            const nav = document.querySelector('nav');
+            nav.innerHTML = workoutPlan.map(day => {
+                const isActive = day.id === currentDayId;
+                const dayCompletedCount = countDayCompleted(day);
+                const dayTotalCount = countDayTotal(day);
+                const isComplete = dayCompletedCount === dayTotalCount && dayTotalCount > 0;
+
+                return `
+                    <button onclick="switchDay('${day.id}')" class="flex-shrink-0 px-5 py-3 rounded-2xl font-semibold text-sm transition flex items-center gap-3 border ${isActive ? 'bg-brand-600 text-white border-brand-500 shadow-lg shadow-brand-600/30' : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'}">
+                        <span>${day.name}</span>
+                        ${isComplete ? '<i class="fa-solid fa-circle-check text-brand-300"></i>' : `<span class="text-xs px-2 py-0.5 rounded-full ${isActive ? 'bg-brand-700 text-brand-100' : 'bg-slate-800 text-slate-400'}">${dayCompletedCount}/${dayTotalCount}</span>`}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Switch Active Day
+        function switchDay(dayId) {
+            currentDayId = dayId;
+            renderTabs();
+            renderDayView(dayId);
+        }
+
+        // Render Active Day Content
+        function renderDayView(dayId) {
+            const day = workoutPlan.find(d => d.id === dayId);
+            const container = document.getElementById('day-view-container');
+
+            const dayCompleted = countDayCompleted(day);
+            const dayTotal = countDayTotal(day);
+            const dayPercent = dayTotal > 0 ? Math.round((dayCompleted / dayTotal) * 100) : 0;
+
+            container.innerHTML = `
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800 mb-6">
+                        <div>
+                            <div class="flex items-center gap-3 mb-1">
+                                <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border ${day.badgeColor}">
+                                    ${day.badge}
+                                </span>
+                                <span class="text-slate-400 text-xs font-medium">Daily Target: 45 Minutes</span>
+                            </div>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-white">${day.name}: ${day.theme}</h2>
+                        </div>
+                        <div class="flex items-center gap-3 bg-slate-950 px-4 py-2.5 rounded-2xl border border-slate-800">
+                            <div class="text-right">
+                                <div class="text-xs text-slate-400">Day Progress</div>
+                                <div class="text-sm font-bold text-brand-400">${dayCompleted} / ${dayTotal} Completed</div>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center font-bold text-xs text-brand-400 border border-slate-800">
+                                ${dayPercent}%
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        ${day.sections.map((section, sIdx) => `
+                            <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-5">
+                                <h3 class="text-white font-bold text-base mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-dumbbell text-brand-500 text-sm"></i> ${section.title}
+                                </h3>
+                                <div class="space-y-3">
+                                    ${section.items.map((item, iIdx) => {
+                                        const isChecked = !!completedItems[item.id];
+                                        return `
+                                            <div onclick="toggleItem('${item.id}')" class="group flex items-start gap-4 p-4 rounded-xl border transition cursor-pointer select-none ${isChecked ? 'bg-brand-950/20 border-brand-500/30 text-slate-400' : 'bg-slate-900/90 hover:bg-slate-900 border-slate-800 hover:border-slate-700 text-slate-200'}">
+                                                <div class="mt-0.5 flex-shrink-0">
+                                                    <div class="w-6 h-6 rounded-lg border flex items-center justify-center transition ${isChecked ? 'bg-brand-600 border-brand-500 text-white' : 'border-slate-700 bg-slate-950 group-hover:border-slate-600'}">
+                                                        ${isChecked ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                                                    </div>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <p class="text-sm sm:text-base font-medium leading-relaxed ${isChecked ? 'line-through text-slate-400' : 'text-slate-200'}">
+                                                        ${item.text}
+                                                    </p>
+                                                    <div class="flex flex-wrap gap-2 mt-2">
+                                                        ${item.duration ? `<span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700"><i class="fa-regular fa-clock text-slate-400"></i> ${item.duration}</span>` : ''}
+                                                        ${item.sets ? `<span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-md bg-brand-500/10 text-brand-300 border border-brand-500/20"><i class="fa-solid fa-repeat text-brand-400"></i> ${item.sets}</span>` : ''}
+                                                        ${item.reps ? `<span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-300 border border-emerald-500/20"><i class="fa-solid fa-bolt text-emerald-400"></i> ${item.reps}</span>` : ''}
+                                                        ${item.note ? `<span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/20"><i class="fa-solid fa-triangle-exclamation text-amber-400"></i> ${item.note}</span>` : ''}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle Item Completion
+        function toggleItem(itemId) {
+            completedItems[itemId] = !completedItems[itemId];
+            localStorage.setItem('mo_workout_progress', JSON.stringify(completedItems));
+            renderDayView(currentDayId);
+            renderTabs();
+            updateOverallProgress();
+            showToast('Progress updated successfully!');
+        }
+
+        // Helper count functions
+        function countDayCompleted(day) {
+            let count = 0;
+            day.sections.forEach(s => {
+                s.items.forEach(i => {
+                    if (completedItems[i.id]) count++;
+                });
+            });
+            return count;
+        }
+
+        function countDayTotal(day) {
+            let count = 0;
+            day.sections.forEach(s => {
+                count += s.items.length;
+            });
+            return count;
+        }
+
+        function updateOverallProgress() {
+            let totalItems = 0;
+            let totalCompleted = 0;
+
+            workoutPlan.forEach(day => {
+                day.sections.forEach(s => {
+                    s.items.forEach(i => {
+                        totalItems++;
+                        if (completedItems[i.id]) totalCompleted++;
+                    });
+                });
+            });
+
+            const percent = totalItems > 0 ? Math.round((totalCompleted / totalItems) * 100) : 0;
+            document.getElementById('overall-percentage').textContent = `${percent}%`;
+            document.getElementById('overall-progress-bar').style.width = `${percent}%`;
+        }
+
+        // Reset All Progress
+        function resetWeekProgress() {
+            if (confirm('Are you sure you want to reset all weekly progress?')) {
+                completedItems = {};
+                localStorage.removeItem('mo_workout_progress');
+                renderTabs();
+                renderDayView(currentDayId);
+                updateOverallProgress();
+                showToast('Weekly progress reset.');
+            }
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 2500);
+        }
+
+        // Knee Guide Modal
+        function openKneeGuide() {
+            document.getElementById('knee-guide-modal').classList.remove('hidden');
+        }
+
+        function closeKneeGuide() {
+            document.getElementById('knee-guide-modal').classList.add('hidden');
+        }
+
+        // Timer Modal & Logic
+        function openTimerModal() {
+            document.getElementById('timer-modal').classList.remove('hidden');
+        }
+
+        function closeTimerModal() {
+            document.getElementById('timer-modal').classList.add('hidden');
+            pauseTimer();
+        }
+
+        function setTimerDuration(seconds) {
+            pauseTimer();
+            timerSeconds = seconds;
+            timerRemaining = seconds;
+            updateTimerDisplay();
+        }
+
+        function toggleTimer() {
+            if (isTimerRunning) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            if (isTimerRunning) return;
+            isTimerRunning = true;
+            document.getElementById('timer-icon').className = 'fa-solid fa-pause';
+            document.getElementById('timer-btn-text').textContent = 'Pause Timer';
+
+            timerInterval = setInterval(() => {
+                if (timerRemaining > 0) {
+                    timerRemaining--;
+                    updateTimerDisplay();
+                } else {
+                    pauseTimer();
+                    showToast('Rest timer complete! Back to work.');
+                    // Play audio beep simulation if desired
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('timer-icon').className = 'fa-solid fa-play';
+            document.getElementById('timer-btn-text').textContent = 'Start Timer';
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timerRemaining = timerSeconds;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerRemaining / 60);
+            const secs = timerRemaining % 60;
+            document.getElementById('timer-display').textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
