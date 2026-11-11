@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mo's Attack Coaching Card — 7-Day Off-Season Lacrosse Plan</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#090d16',
+                        cardBg: '#111827',
+                        cardBorder: '#1f2937',
+                        accent: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom subtle scrollbars */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #090d16; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Top Header & Controls -->
+    <header class="bg-cardBg/90 backdrop-blur-md border-b border-cardBorder sticky top-0 z-30 shadow-lg">
+        <div class="max-w-5xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 text-white font-black text-lg px-3 py-1.5 rounded-xl tracking-wider shadow-inner">
+                    LAX
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white">Mo's Attack Coaching Card</h1>
+                        <span class="text-[11px] bg-blue-950 text-blue-300 border border-blue-800/80 px-2 py-0.5 rounded-full font-semibold">Marlene • 45 Min Cap</span>
+                    </div>
+                    <p class="text-xs text-slate-400">7-Day High-Performance Off-Season Plan</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <!-- Reset Checkboxes for Current Day -->
+                <button id="btn-reset-checks" title="Reset today's completed checkboxes" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3 py-2 rounded-lg transition border border-slate-700 flex items-center gap-1.5 cursor-pointer">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Reset Checks
+                </button>
+
+                <!-- Edit Plan Button (Shown when GitHub PAT is configured) -->
+                <button id="btn-toggle-edit" class="hidden admin-only bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow flex items-center gap-1.5 cursor-pointer">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    <span id="edit-btn-label">Edit Plan</span>
+                </button>
+
+                <!-- Save to GitHub Button (Shown in Edit Mode) -->
+                <button id="btn-save-github" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow flex items-center gap-1.5 cursor-pointer">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    Save to GitHub
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 py-5 flex-grow w-full space-y-5">
+
+        <!-- Mandatory Daily Protocol Accordion -->
+        <details class="bg-cardBg border border-cardBorder rounded-xl overflow-hidden group">
+            <summary class="px-4 py-3 cursor-pointer flex justify-between items-center text-xs sm:text-sm font-bold text-slate-200 hover:bg-slate-800/50 transition select-none">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <span>Mandatory Daily Knee-Care &amp; Mobility Protocol</span>
+                    <span class="text-[11px] font-normal text-slate-400 hidden sm:inline">(Pre-Workout 8m &amp; Post-Workout 6-15m)</span>
+                </div>
+                <svg class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-4 pb-4 pt-2 border-t border-cardBorder grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300 bg-slate-900/40">
+                <div class="space-y-1.5">
+                    <div class="font-bold text-blue-400 uppercase tracking-wider text-[11px]">Pre-Workout Warm-Up (8 Mins)</div>
+                    <ul class="space-y-1 text-slate-300 list-disc list-inside">
+                        <li><strong class="text-slate-100">0–3m:</strong> Kneeling Couch Stretch (30s/leg) + Dynamic Lunges</li>
+                        <li><strong class="text-slate-100">3–6m:</strong> 15 Leg Swings (Fwd/Back &amp; Lat) + 10 Squats</li>
+                        <li><strong class="text-slate-100">6–8m:</strong> Banded Ankle Mobilizations + Calf Pumps</li>
+                    </ul>
+                </div>
+                <div class="space-y-1.5">
+                    <div class="font-bold text-emerald-400 uppercase tracking-wider text-[11px]">Post-Workout Cool-Down (6–15 Mins)</div>
+                    <ul class="space-y-1 text-slate-300 list-disc list-inside">
+                        <li>Standing Quad Stretch (45s–60s hold)</li>
+                        <li>Figure-4 Glute Stretch (45s–60s hold)</li>
+                        <li>Calf &amp; Hamstring Static Lengthening</li>
+                    </ul>
+                </div>
+            </div>
+        </details>
+
+        <!-- Interactive Workout & Rest Timer Bar -->
+        <section class="bg-cardBg border border-cardBorder rounded-xl p-4 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
+                <div>
+                    <div class="text-[10px] uppercase tracking-wider font-bold text-slate-400 flex items-center gap-1.5">
+                        <span id="timer-mode-label">Rest / Interval Timer</span>
+                        <span id="timer-status-dot" class="w-2 h-2 rounded-full bg-slate-600"></span>
+                    </div>
+                    <div id="timer-display" class="text-3xl sm:text-4xl font-mono font-black tracking-tight text-white mt-0.5 transition-colors">
+                        00:45
+                    </div>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button id="btn-timer-start" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-2 rounded-lg transition cursor-pointer">Start</button>
+                    <button id="btn-timer-pause" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-3 py-2 rounded-lg transition border border-slate-700 cursor-pointer">Pause</button>
+                    <button id="btn-timer-reset" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-3 py-2 rounded-lg transition border border-slate-700 cursor-pointer">Reset</button>
+                </div>
+            </div>
+
+            <!-- Preset Quick Intervals -->
+            <div class="flex flex-wrap items-center gap-1.5 w-full sm:w-auto justify-start sm:justify-end">
+                <span class="text-[11px] text-slate-400 mr-1 font-medium">Presets:</span>
+                <button data-seconds="30" class="preset-timer-btn bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition cursor-pointer">30s Rest</button>
+                <button data-seconds="45" class="preset-timer-btn bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition cursor-pointer">45s Rest</button>
+                <button data-seconds="60" class="preset-timer-btn bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition cursor-pointer">60s Rest</button>
+                <button data-seconds="480" class="preset-timer-btn bg-slate-900 hover:bg-slate-800 text-blue-300 border border-blue-900/60 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition cursor-pointer">8m Block</button>
+                <button data-seconds="1380" class="preset-timer-btn bg-slate-900 hover:bg-slate-800 text-blue-300 border border-blue-900/60 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition cursor-pointer">23m Block</button>
+            </div>
+        </section>
+
+        <!-- 7-Day Navigation Tabs -->
+        <nav class="flex overflow-x-auto pb-1 gap-2" id="day-tabs" aria-label="Days of the week">
+            <!-- Populated by JS -->
+        </nav>
+
+        <!-- Active Day Workout Card -->
+        <section id="workout-container" class="space-y-4">
+            <!-- Populated by JS -->
+        </section>
+
+    </main>
+
+    <!-- Footer with Discreet GitHub Sync Trigger -->
+    <footer class="bg-cardBg border-t border-cardBorder py-4 mt-8">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-slate-400">
+            <div class="flex items-center gap-2">
+                <span>Focus: Knee Care, 8M Power, Crease &amp; Pick Mechanics</span>
+                <span class="hidden sm:inline">•</span>
+                <span class="text-amber-400/90 font-medium">Tue/Thu Low-Impact (Basketball Nights)</span>
+            </div>
+            <button id="btn-open-github-modal" class="hover:text-slate-200 transition flex items-center gap-1.5 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800 cursor-pointer">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                <span>GitHub Sync</span>
+                <span id="gh-status-dot" class="w-2 h-2 rounded-full bg-slate-600"></span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- GitHub Repository Config Modal -->
+    <div id="modal-github" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-cardBg border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    GitHub Repository Connection
+                </h2>
+                <button id="btn-close-github-modal" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Enter your GitHub repository details and a Fine-Grained Personal Access Token (with <strong class="text-slate-200">Contents: Read &amp; Write</strong> permission) to unlock editing and save updates directly to <code class="text-blue-400 bg-slate-900 px-1 py-0.5 rounded">plan-data.json</code> in your repo.
+            </p>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">GitHub Username / Owner</label>
+                    <input type="text" id="gh-owner" placeholder="e.g. kuhnsdc" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Repository Name</label>
+                    <input type="text" id="gh-repo" placeholder="e.g. Lax_Workout_plan" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Branch</label>
+                        <input type="text" id="gh-branch" value="main" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">JSON File Path</label>
+                        <input type="text" id="gh-path" value="plan-data.json" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Personal Access Token (PAT)</label>
+                    <input type="password" id="gh-token" placeholder="github_pat_..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500">
+                </div>
+            </div>
+            <div id="gh-feedback" class="text-xs font-medium hidden"></div>
+            <div class="flex justify-between items-center pt-2 border-t border-slate-800">
+                <button id="btn-gh-disconnect" class="text-xs text-red-400 hover:text-red-300 underline cursor-pointer">Disconnect / Lock</button>
+                <button id="btn-gh-save-config" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition cursor-pointer">Save &amp; Unlock Edit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 border border-slate-700 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50"></div>
+
+    <!-- Embedded Default Seed Data (Fallback if plan-data.json is not yet pushed to GitHub) -->
+    <script id="seed-plan-data" type="application/json">
+    {
+      "athlete": "Marlene",
+      "dailyCapMins": 45,
+      "days": [
+        {
+          "id": "mon",
+          "day": "Monday",
+          "title": "X-Dominance & First-Step Explosiveness",
+          "intensity": "High Intensity",
+          "isBasketballNight": false,
+          "blocks": [
+            {
+              "time": "00-08 min",
+              "name": "Knee-Care Dynamic Warm-Up",
+              "durationMins": 8,
+              "drills": [
+                { "id": "mon-1-1", "name": "Couch stretch, leg swings, ankle pumps", "reps": "8 mins continuous", "rest": "0s", "notes": "Kneeling Couch Stretch (30s/leg), 15 Leg Swings, Banded Ankle Mobilizations" }
+              ]
+            },
+            {
+              "time": "08-16 min",
+              "name": "Joint-Safe Plyometrics",
+              "durationMins": 8,
+              "drills": [
+                { "id": "mon-2-1", "name": "Low-Impact Deceleration Drops", "reps": "3x5 reps", "rest": "45s", "notes": "6" low box, absorb through hips" },
+                { "id": "mon-2-2", "name": "Broad Jump to Stick Landing", "reps": "3x5 reps", "rest": "60s", "notes": "Silent, soft landing" }
+              ]
+            },
+            {
+              "time": "16-39 min",
+              "name": "Stick Work & 8M Power Shooting",
+              "durationMins": 23,
+              "drills": [
+                { "id": "mon-3-1", "name": "8M Step-Down Power Driving", "reps": "24 reps (12R/12L)", "rest": "30s", "notes": "Off X feeds" },
+                { "id": "mon-3-2", "name": "Dodging Dummies & Roll-Offs at X", "reps": "20 reps/side", "rest": "45s", "notes": "Dodge, seal, roll tight to pipe" },
+                { "id": "mon-3-3", "name": "Off-Hand High-Corner Finishing", "reps": "25 reps", "rest": "30s", "notes": "From weak wing" }
+              ]
+            },
+            {
+              "time": "39-45 min",
+              "name": "Extended Knee-Care Cool-Down",
+              "durationMins": 6,
+              "drills": [
+                { "id": "mon-4-1", "name": "Quad & glute static holds", "reps": "45s-60s holds", "rest": "0s", "notes": "Standing Quad Stretch + Figure-4 Glute Stretch" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tue",
+          "day": "Tuesday",
+          "title": "Low-Impact Power & Volume Shooting",
+          "intensity": "Basketball Night",
+          "isBasketballNight": true,
+          "blocks": [
+            {
+              "time": "00-08 min",
+              "name": "Tissue Prep Warm-Up",
+              "durationMins": 8,
+              "drills": [
+                { "id": "tue-1-1", "name": "Foam roll quads/calves, walking lunges, hip rotations", "reps": "8 mins", "rest": "0s", "notes": "Gentle tissue prep prior to basketball" }
+              ]
+            },
+            {
+              "time": "08-08 min",
+              "name": "Plyometrics Skipped",
+              "durationMins": 0,
+              "drills": [
+                { "id": "tue-2-1", "name": "Plyometrics skipped to preserve joints for basketball practice", "reps": "0 reps", "rest": "0s", "notes": "Low-impact schedule rule active" }
+              ]
+            },
+            {
+              "time": "08-37 min",
+              "name": "Low-Impact Stick Work & 8M Power Arc",
+              "durationMins": 29,
+              "drills": [
+                { "id": "tue-3-1", "name": "Stationary 8M Power Drives", "reps": "30 reps", "rest": "45s", "notes": "Max rotation into top corners" },
+                { "id": "tue-3-2", "name": "Wall Ball / Rebounder Cradling", "reps": "125R/125L", "rest": "30s", "notes": "Quick stick protection" },
+                { "id": "tue-3-3", "name": "Wing Catch & Shoot", "reps": "30 reps", "rest": "45s", "notes": "On the run off X feed" }
+              ]
+            },
+            {
+              "time": "37-45 min",
+              "name": "Deep Static Cool-Down",
+              "durationMins": 8,
+              "drills": [
+                { "id": "tue-4-1", "name": "60s holds for quads, hip flexors, calves", "reps": "60s each", "rest": "0s", "notes": "Deep static lengthening" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "wed",
+          "day": "Wednesday",
+          "title": "Wing Play & Pick-and-Roll Mastery",
+          "intensity": "High Intensity",
+          "isBasketballNight": false,
+          "blocks": [
+            {
+              "time": "00-08 min",
+              "name": "Knee-Care Warm-Up",
+              "durationMins": 8,
+              "drills": [
+                { "id": "wed-1-1", "name": "Kneeling lunges, lateral band walks, calf raises", "reps": "8 mins", "rest": "0s", "notes": "Activate glutes and ankles" }
+              ]
+            },
+            {
+              "time": "08-16 min",
+              "name": "Joint-Safe Plyometrics",
+              "durationMins": 8,
+              "drills": [
+                { "id": "wed-2-1", "name": "Lateral Skaters", "reps": "3x6 reps/side", "rest": "45s", "notes": "Soft, wide lateral bounds" },
+                { "id": "wed-2-2", "name": "Rotational Deceleration Cuts", "reps": "3x5 reps/side", "rest": "45s", "notes": "90° plant & drop" }
+              ]
+            },
+            {
+              "time": "16-39 min",
+              "name": "Stick Work & 8M Power Sweep",
+              "durationMins": 23,
+              "drills": [
+                { "id": "wed-3-1", "name": "8M Sweeping Power Dodge", "reps": "20 reps (10R/10L)", "rest": "45s", "notes": "Across fan" },
+                { "id": "wed-3-2", "name": "Working Off Picks (W/ Parent)", "reps": "18 reps", "rest": "45s", "notes": "Set pick, curl, quick finish" },
+                { "id": "wed-3-3", "name": "Off-Hand Wing Dodges", "reps": "20 reps", "rest": "30s", "notes": "Alley drives & step-away shots" }
+              ]
+            },
+            {
+              "time": "39-45 min",
+              "name": "Extended Knee-Care Cool-Down",
+              "durationMins": 6,
+              "drills": [
+                { "id": "wed-4-1", "name": "Runner's lunges & quad foam stretching", "reps": "6 mins", "rest": "0s", "notes": "Hold stretches 45-60s" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "thu",
+          "day": "Thursday",
+          "title": "Low-Impact Free Position Focus",
+          "intensity": "Basketball Night",
+          "isBasketballNight": true,
+          "blocks": [
+            {
+              "time": "00-08 min",
+              "name": "Activation Warm-Up",
+              "durationMins": 8,
+              "drills": [
+                { "id": "thu-1-1", "name": "Bird-dogs, glute bridges, dynamic leg stretches", "reps": "8 mins", "rest": "0s", "notes": "Low-impact core & hip activation" }
+              ]
+            },
+            {
+              "time": "08-08 min",
+              "name": "Plyometrics Skipped",
+              "durationMins": 0,
+              "drills": [
+                { "id": "thu-2-1", "name": "Plyometrics skipped to protect knees before basketball practice", "reps": "0 reps", "rest": "0s", "notes": "Low-impact schedule rule active" }
+              ]
+            },
+            {
+              "time": "08-37 min",
+              "name": "Low-Impact Stick Work & 8M Free Position",
+              "durationMins": 29,
+              "drills": [
+                { "id": "thu-3-1", "name": "8M Free Position Hash Drives", "reps": "28 reps", "rest": "30s", "notes": "Explosive drive off hash" },
+                { "id": "thu-3-2", "name": "One-Touch Crease Finishing", "reps": "40 reps", "rest": "30s", "notes": "Zero wind-up from 8M feeds" },
+                { "id": "thu-3-3", "name": "Off-Hand Wall/Rebounder Work", "reps": "150 reps", "rest": "30s", "notes": "High-speed passing" }
+              ]
+            },
+            {
+              "time": "37-45 min",
+              "name": "Extended Knee-Care Cool-Down",
+              "durationMins": 8,
+              "drills": [
+                { "id": "thu-4-1", "name": "Static quad, hamstring & hip flexor stretches", "reps": "8 mins", "rest": "0s", "notes": "Hold 45s-60s each" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "fri",
+          "day": "Friday",
+          "title": "Crease Craft & Tight-Space Power",
+          "intensity": "High Intensity",
+          "isBasketballNight": false,
+          "blocks": [
+            {
+              "time": "00-08 min",
+              "name": "Knee-Care Warm-Up",
+              "durationMins": 8,
+              "drills": [
+                { "id": "fri-1-1", "name": "Couch stretch, agility ladder fast-feet, toe/heel walks", "reps": "8 mins", "rest": "0s", "notes": "Quick footwork & quad mobility" }
+              ]
+            },
+            {
+              "time": "08-16 min",
+              "name": "Joint-Safe Plyometrics",
+              "durationMins": 8,
+              "drills": [
+                { "id": "fri-2-1", "name": "Drop-Step to Acceleration", "reps": "3x6 reps", "rest": "45s", "notes": "5yd burst out of turn" },
+                { "id": "fri-2-2", "name": "Low-Depth Pogo Hops", "reps": "3x10 reps", "rest": "45s", "notes": "Stiff ankles, low knee bend" }
+              ]
+            },
+            {
+              "time": "16-39 min",
+              "name": "Stick Work & Tight-Space Power",
+              "durationMins": 23,
+              "drills": [
+                { "id": "fri-3-1", "name": "8M Roll-and-Rise Power Shots", "reps": "20 reps", "rest": "45s", "notes": "Roll dummy, pop to space, blast" },
+                { "id": "fri-3-2", "name": "Dodge Dummy Maze at Crease", "reps": "18 reps", "rest": "45s", "notes": "Fig-8 weave, fake & finish" },
+                { "id": "fri-3-3", "name": "Backside Recovery Feeds", "reps": "20 reps", "rest": "30s", "notes": "Flash across crease low-to-high" }
+              ]
+            },
+            {
+              "time": "39-45 min",
+              "name": "Extended Knee-Care Cool-Down",
+              "durationMins": 6,
+              "drills": [
+                { "id": "fri-4-1", "name": "Quad, hip flexor & glute static holds", "reps": "6 mins", "rest": "0s", "notes": "45s-60s holds" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sat",
+          "day": "Saturday",
+          "title": "Full Simulation & Max-Velocity Shooting",
+          "intensity": "High Intensity",
+          "isBasketballNight": false,
+          "blocks": [
+            {
+              "time": "00-08 min",
+              "name": "Warm-Up & Activation",
+              "durationMins": 8,
+              "drills": [
+                { "id": "sat-1-1", "name": "Walking quad stretches, band monster walks", "reps": "8 mins", "rest": "0s", "notes": "Full lower-body priming" }
+              ]
+            },
+            {
+              "time": "08-16 min",
+              "name": "Joint-Safe Plyometrics",
+              "durationMins": 8,
+              "drills": [
+                { "id": "sat-2-1", "name": "Broad Jump to Decel Stick", "reps": "3x5 reps", "rest": "45s", "notes": "Stick landing softly" },
+                { "id": "sat-2-2", "name": "Lateral Skaters", "reps": "3x6 reps/side", "rest": "45s", "notes": "Explosive lateral push" }
+              ]
+            },
+            {
+              "time": "16-39 min",
+              "name": "Simulation & Max-Velocity Shooting",
+              "durationMins": 23,
+              "drills": [
+                { "id": "sat-3-1", "name": "8M Step-Down Max Power", "reps": "24 reps", "rest": "45s", "notes": "Full hip load & trunk whip" },
+                { "id": "sat-3-2", "name": "The X-to-Wing Circuit", "reps": "8 full-speed reps", "rest": "60s", "notes": "Dodge X -> Feed -> Dodge Wing Shot" },
+                { "id": "sat-3-3", "name": "High-Pressure Padded Finishing", "reps": "15 reps", "rest": "30s", "notes": "Against pad pressure" }
+              ]
+            },
+            {
+              "time": "39-45 min",
+              "name": "Extended Knee-Care Cool-Down",
+              "durationMins": 6,
+              "drills": [
+                { "id": "sat-4-1", "name": "Full lower body static flush", "reps": "6 mins", "rest": "0s", "notes": "Quads, glutes, calves, hamstrings" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sun",
+          "day": "Sunday",
+          "title": "Active Recovery & Form Precision",
+          "intensity": "Active Recovery",
+          "isBasketballNight": false,
+          "blocks": [
+            {
+              "time": "00-10 min",
+              "name": "Light Dynamic Flow & Foam Rolling",
+              "durationMins": 10,
+              "drills": [
+                { "id": "sun-1-1", "name": "Cat-cow, hip circles, light quad/calf rolling", "reps": "10 mins", "rest": "0s", "notes": "Flush soreness and restore mobility" }
+              ]
+            },
+            {
+              "time": "10-30 min",
+              "name": "Form-Focus 8M Precision Shooting (Zero Jump)",
+              "durationMins": 20,
+              "drills": [
+                { "id": "sun-2-1", "name": "Zero-Jump Form-Focused Power Shooting from 8M", "reps": "50 Total Reps (25R / 25L)", "rest": "45s", "notes": "Focus on trunk whip, wrist snap, and hitting corners/pipes without joint stress" }
+              ]
+            },
+            {
+              "time": "30-45 min",
+              "name": "Deep Static Recovery Stretch",
+              "durationMins": 15,
+              "drills": [
+                { "id": "sun-3-1", "name": "Long-hold static stretching", "reps": "15 mins", "rest": "0s", "notes": "Quads, hip flexors, hamstrings, and lower back" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <script>
+        /**
+         * Single-Page Lacrosse Workout Application
+         * - Fetches live data from GitHub (plan-data.json) or falls back to embedded seed data
+         * - Interactive checkboxes persisted in localStorage per day/drill
+         * - Countdown & interval timer with rest presets and flashing final-second warning
+         * - Inline editing mode (unlocked via GitHub PAT) that commits directly to GitHub via REST API
+         */
+        const STORAGE_GH_KEY = 'lax_gh_sync_config';
+        const STORAGE_CHECKS_KEY = 'lax_workout_checks_v1';
+
+        let planData = null;
+        let activeDayId = 'mon';
+        let isEditMode = false;
+        let checkedState = {};
+
+        // Timer state
+        let timerSecondsLeft = 45;
+        let timerInitialSeconds = 45;
+        let timerInterval = null;
+        let timerRunning = false;
+
+        // GitHub Config
+        let ghConfig = {
+            owner: '',
+            repo: '',
+            branch: 'main',
+            path: 'plan-data.json',
+            token: ''
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadGitHubConfig();
+            loadCheckedState();
+            await initPlanData();
+            autoSelectToday();
+            bindEvents();
+            updateAuthUI();
+            renderAll();
+        });
+
+        function loadGitHubConfig() {
+            try {
+                const saved = localStorage.getItem(STORAGE_GH_KEY);
+                if (saved) ghConfig = { ...ghConfig, ...JSON.parse(saved) };
+            } catch (e) {
+                console.error('Error loading GitHub config', e);
+            }
+        }
+
+        function saveGitHubConfig() {
+            localStorage.setItem(STORAGE_GH_KEY, JSON.stringify(ghConfig));
+        }
+
+        function loadCheckedState() {
+            try {
+                const saved = localStorage.getItem(STORAGE_CHECKS_KEY);
+                if (saved) checkedState = JSON.parse(saved);
+            } catch (e) {
+                checkedState = {};
+            }
+        }
+
+        function saveCheckedState() {
+            localStorage.setItem(STORAGE_CHECKS_KEY, JSON.stringify(checkedState));
+        }
+
+        async function initPlanData() {
+            const seedData = JSON.parse(document.getElementById('seed-plan-data').textContent);
+
+            // Attempt to load live plan-data.json from the same GitHub Pages directory (cache-busted)
+            try {
+                const targetPath = ghConfig.path || 'plan-data.json';
+                const res = await fetch(`${targetPath}?t=${Date.now()}`, { cache: 'no-store' });
+                if (res.ok) {
+                    const remoteJson = await res.json();
+                    if (remoteJson && Array.isArray(remoteJson.days)) {
+                        planData = remoteJson;
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.log('Using embedded seed plan data (plan-data.json not found on host yet).');
+            }
+
+            planData = seedData;
+        }
+
+        function autoSelectToday() {
+            const map = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            const today = map[new Date().getDay()];
+            if (planData && planData.days.some(d => d.id === today)) {
+                activeDayId = today;
+            }
+        }
+
+        function updateAuthUI() {
+            const hasToken = Boolean(ghConfig.token && ghConfig.token.trim());
+            const editBtn = document.getElementById('btn-toggle-edit');
+            const statusDot = document.getElementById('gh-status-dot');
+
+            if (hasToken) {
+                editBtn.classList.remove('hidden');
+                statusDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+            } else {
+                editBtn.classList.add('hidden');
+                isEditMode = false;
+                document.getElementById('btn-save-github').classList.add('hidden');
+                statusDot.className = 'w-2 h-2 rounded-full bg-slate-600';
+            }
+        }
+
+        function bindEvents() {
+            // Reset checkboxes for current day
+            document.getElementById('btn-reset-checks').addEventListener('click', () => {
+                const day = getActiveDay();
+                if (!day) return;
+                day.blocks.forEach(block => {
+                    block.drills.forEach(drill => {
+                        delete checkedState[drill.id];
+                    });
+                });
+                saveCheckedState();
+                renderWorkout();
+                showToast(`Reset checkboxes for ${day.day}`);
+            });
+
+            // Toggle Edit Mode
+            document.getElementById('btn-toggle-edit').addEventListener('click', () => {
+                isEditMode = !isEditMode;
+                const label = document.getElementById('edit-btn-label');
+                const saveBtn = document.getElementById('btn-save-github');
+                if (isEditMode) {
+                    label.textContent = 'Done Editing';
+                    saveBtn.classList.remove('hidden');
+                } else {
+                    label.textContent = 'Edit Plan';
+                    saveBtn.classList.add('hidden');
+                }
+                renderWorkout();
+            });
+
+            // Save to GitHub
+            document.getElementById('btn-save-github').addEventListener('click', commitPlanToGitHub);
+
+            // Timer Controls
+            document.getElementById('btn-timer-start').addEventListener('click', startTimer);
+            document.getElementById('btn-timer-pause').addEventListener('click', pauseTimer);
+            document.getElementById('btn-timer-reset').addEventListener('click', () => setTimer(timerInitialSeconds));
+
+            document.querySelectorAll('.preset-timer-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const secs = parseInt(e.currentTarget.getAttribute('data-seconds'), 10);
+                    setTimer(secs);
+                    startTimer();
+                });
+            });
+
+            // GitHub Modal Controls
+            document.getElementById('btn-open-github-modal').addEventListener('click', () => {
+                document.getElementById('gh-owner').value = ghConfig.owner || '';
+                document.getElementById('gh-repo').value = ghConfig.repo || '';
+                document.getElementById('gh-branch').value = ghConfig.branch || 'main';
+                document.getElementById('gh-path').value = ghConfig.path || 'plan-data.json';
+                document.getElementById('gh-token').value = ghConfig.token || '';
+                document.getElementById('gh-feedback').classList.add('hidden');
+                document.getElementById('modal-github').classList.remove('hidden');
+            });
+
+            document.getElementById('btn-close-github-modal').addEventListener('click', () => {
+                document.getElementById('modal-github').classList.add('hidden');
+            });
+
+            document.getElementById('btn-gh-save-config').addEventListener('click', () => {
+                ghConfig.owner = document.getElementById('gh-owner').value.trim();
+                ghConfig.repo = document.getElementById('gh-repo').value.trim();
+                ghConfig.branch = document.getElementById('gh-branch').value.trim() || 'main';
+                ghConfig.path = document.getElementById('gh-path').value.trim() || 'plan-data.json';
+                ghConfig.token = document.getElementById('gh-token').value.trim();
+                saveGitHubConfig();
+                updateAuthUI();
+                document.getElementById('modal-github').classList.add('hidden');
+                showToast('GitHub sync settings saved!');
+            });
+
+            document.getElementById('btn-gh-disconnect').addEventListener('click', () => {
+                ghConfig.token = '';
+                saveGitHubConfig();
+                updateAuthUI();
+                renderWorkout();
+                document.getElementById('modal-github').classList.add('hidden');
+                showToast('Disconnected GitHub token. Edit mode locked.');
+            });
+        }
+
+        function getActiveDay() {
+            return planData.days.find(d => d.id === activeDayId) || planData.days[0];
+        }
+
+        function renderAll() {
+            renderDayTabs();
+            renderWorkout();
+        }
+
+        function renderDayTabs() {
+            const tabsEl = document.getElementById('day-tabs');
+            tabsEl.innerHTML = '';
+
+            planData.days.forEach(day => {
+                const isActive = day.id === activeDayId;
+                const btn = document.createElement('button');
+                btn.className = `px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 cursor-pointer border ${
+                    isActive
+                        ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-950'
+                        : 'bg-cardBg hover:bg-slate-800 text-slate-300 border-cardBorder'
+                }`;
+
+                const badge = day.isBasketballNight
+                    ? `<span class="w-2 h-2 rounded-full bg-amber-400" title="Basketball Night (Low-Impact)"></span>`
+                    : '';
+
+                btn.innerHTML = `<span>${day.day.slice(0, 3)}</span>${badge}`;
+                btn.addEventListener('click', () => {
+                    activeDayId = day.id;
+                    renderAll();
+                });
+                tabsEl.appendChild(btn);
+            });
+        }
+
+        function renderWorkout() {
+            const container = document.getElementById('workout-container');
+            const day = getActiveDay();
+            if (!day) return;
+
+            const totalMins = day.blocks.reduce((acc, b) => acc + (parseInt(b.durationMins, 10) || 0), 0);
+            const overCap = totalMins > (planData.dailyCapMins || 45);
+
+            // Count completed checkboxes
+            let totalDrills = 0;
+            let completedDrills = 0;
+            day.blocks.forEach(b => b.drills.forEach(d => {
+                totalDrills++;
+                if (checkedState[d.id]) completedDrills++;
+            }));
+
+            let badgeClass = 'bg-purple-950/80 text-purple-300 border-purple-800';
+            if (day.isBasketballNight) badgeClass = 'bg-amber-950/80 text-amber-300 border-amber-800';
+            if (day.intensity === 'Active Recovery') badgeClass = 'bg-emerald-950/80 text-emerald-300 border-emerald-800';
+
+            let html = `
+                <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 shadow-xl space-y-5">
+                    <!-- Day Header -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-cardBorder pb-4">
+                        <div class="space-y-1 w-full sm:w-auto">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="text-xs font-black uppercase tracking-wider text-blue-400">${day.day}</span>
+                                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${badgeClass}">
+                                    ${day.isBasketballNight ? '🏀 ' : ''}${day.intensity}
+                                </span>
+                            </div>
+                            ${isEditMode
+                                ? `<input type="text" data-field="day-title" value="${escapeHtml(day.title)}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-base font-bold text-white focus:outline-none focus:border-blue-500 mt-1">`
+                                : `<h2 class="text-lg sm:text-xl font-extrabold text-white">${escapeHtml(day.title)}</h2>`
+                            }
+                        </div>
+
+                        <div class="flex items-center gap-3 self-end sm:self-center">
+                            <div class="text-right">
+                                <div class="text-[10px] uppercase font-bold text-slate-400">Progress</div>
+                                <div class="text-xs font-bold text-slate-200">${completedDrills} / ${totalDrills} Done</div>
+                            </div>
+                            <div class="h-7 w-px bg-slate-800"></div>
+                            <div class="text-right">
+                                <div class="text-[10px] uppercase font-bold text-slate-400">Total Time</div>
+                                <div class="text-xs font-bold ${overCap ? 'text-red-400' : 'text-emerald-400'}">${totalMins} / ${planData.dailyCapMins} min</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Time Blocks -->
+                    <div class="space-y-4">
+            `;
+
+            day.blocks.forEach((block, bIdx) => {
+                html += `
+                    <div class="bg-slate-900/60 border border-slate-800/90 rounded-xl p-4 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-2.5">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="text-xs font-mono font-bold bg-blue-950 text-blue-300 border border-blue-800/70 px-2 py-0.5 rounded">
+                                    ${escapeHtml(block.time)}
+                                </span>
+                                ${isEditMode
+                                    ? `<input type="text" data-bidx="${bIdx}" data-field="block-name" value="${escapeHtml(block.name)}" class="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-sm font-bold text-slate-100">`
+                                    : `<h3 class="text-sm font-bold text-slate-100">${escapeHtml(block.name)}</h3>`
+                                }
+                            </div>
+                            ${block.durationMins > 0 ? `
+                                <button data-seconds="${block.durationMins * 60}" class="block-timer-trigger self-start sm:self-center text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-blue-300 px-2.5 py-1 rounded-lg border border-slate-700 transition cursor-pointer">
+                                    ⏱ Start ${block.durationMins}m Block
+                                </button>
+                            ` : ''}
+                        </div>
+
+                        <!-- Drills List -->
+                        <div class="space-y-2.5">
+                `;
+
+                block.drills.forEach((drill, dIdx) => {
+                    const isChecked = Boolean(checkedState[drill.id]);
+                    const restSecs = parseInt(drill.rest, 10) || 0;
+
+                    html += `
+                        <div class="bg-cardBg border ${isChecked ? 'border-emerald-900/50 bg-emerald-950/10' : 'border-slate-800'} rounded-xl p-3.5 transition">
+                            ${isEditMode ? `
+                                <div class="space-y-2">
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                        <input type="text" data-bidx="${bIdx}" data-didx="${dIdx}" data-field="drill-name" value="${escapeHtml(drill.name)}" placeholder="Drill Name" class="sm:col-span-2 bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white font-semibold">
+                                        <div class="grid grid-cols-2 gap-1.5">
+                                            <input type="text" data-bidx="${bIdx}" data-didx="${dIdx}" data-field="drill-reps" value="${escapeHtml(drill.reps)}" placeholder="Reps" class="bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-xs text-blue-300">
+                                            <input type="text" data-bidx="${bIdx}" data-didx="${dIdx}" data-field="drill-rest" value="${escapeHtml(drill.rest)}" placeholder="Rest" class="bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-xs text-amber-300">
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <input type="text" data-bidx="${bIdx}" data-didx="${dIdx}" data-field="drill-notes" value="${escapeHtml(drill.notes)}" placeholder="Coaching cues / notes" class="flex-grow bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-300">
+                                        <button data-bidx="${bIdx}" data-didx="${dIdx}" class="btn-delete-drill text-red-400 hover:text-red-300 text-xs font-semibold px-2 py-1 rounded bg-red-950/40 border border-red-900/50 cursor-pointer">Delete</button>
+                                    </div>
+                                </div>
+                            ` : `
+                                <div class="flex items-start justify-between gap-3">
+                                    <label class="flex items-start gap-3 cursor-pointer flex-grow select-none">
+                                        <input type="checkbox" data-drill-id="${drill.id}" ${isChecked ? 'checked' : ''} class="drill-checkbox mt-0.5 w-4 h-4 rounded bg-slate-900 border-slate-600 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                                        <div class="space-y-1">
+                                            <div class="text-sm font-bold ${isChecked ? 'line-through text-slate-500' : 'text-slate-100'}">
+                                                ${escapeHtml(drill.name)}
+                                            </div>
+                                            ${drill.notes ? `<div class="text-xs text-slate-400 leading-relaxed">${escapeHtml(drill.notes)}</div>` : ''}
+                                        </div>
+                                    </label>
+
+                                    <div class="flex flex-col sm:flex-row items-end sm:items-center gap-1.5 shrink-0">
+                                        <span class="text-[11px] font-bold bg-blue-950/80 text-blue-300 border border-blue-800/60 px-2.5 py-1 rounded-lg">
+                                            ${escapeHtml(drill.reps)}
+                                        </span>
+                                        ${restSecs > 0 ? `
+                                            <button data-seconds="${restSecs}" class="drill-rest-btn text-[11px] font-bold bg-amber-950/80 hover:bg-amber-900/70 text-amber-300 border border-amber-800/60 px-2.5 py-1 rounded-lg transition cursor-pointer" title="Start ${restSecs}s rest timer">
+                                                ⏱ Rest ${escapeHtml(drill.rest)}
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            `}
+                        </div>
+                    `;
+                });
+
+                if (isEditMode) {
+                    html += `
+                        <button data-bidx="${bIdx}" class="btn-add-drill text-xs font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-1 pt-1 cursor-pointer">
+                            + Add Drill to Block
+                        </button>
+                    `;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            bindWorkoutInteractions();
+        }
+
+        function bindWorkoutInteractions() {
+            // Checkboxes
+            document.querySelectorAll('.drill-checkbox').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const id = e.target.getAttribute('data-drill-id');
+                    if (e.target.checked) {
+                        checkedState[id] = true;
+                    } else {
+                        delete checkedState[id];
+                    }
+                    saveCheckedState();
+                    renderWorkout();
+                });
+            });
+
+            // Rest & Block Timer triggers inside cards
+            document.querySelectorAll('.drill-rest-btn, .block-timer-trigger').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const secs = parseInt(e.currentTarget.getAttribute('data-seconds'), 10);
+                    setTimer(secs);
+                    startTimer();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+
+            // Edit Mode Inputs
+            if (isEditMode) {
+                const day = getActiveDay();
+                const dayTitleInput = document.querySelector('[data-field="day-title"]');
+                if (dayTitleInput) {
+                    dayTitleInput.addEventListener('input', (e) => {
+                        day.title = e.target.value;
+                    });
+                }
+
+                document.querySelectorAll('[data-field="block-name"]').forEach(inp => {
+                    inp.addEventListener('input', (e) => {
+                        const bIdx = parseInt(e.target.getAttribute('data-bidx'), 10);
+                        day.blocks[bIdx].name = e.target.value;
+                    });
+                });
+
+                document.querySelectorAll('[data-field^="drill-"]').forEach(inp => {
+                    inp.addEventListener('input', (e) => {
+                        const bIdx = parseInt(e.target.getAttribute('data-bidx'), 10);
+                        const dIdx = parseInt(e.target.getAttribute('data-didx'), 10);
+                        const field = e.target.getAttribute('data-field').replace('drill-', '');
+                        day.blocks[bIdx].drills[dIdx][field] = e.target.value;
+                    });
+                });
+
+                document.querySelectorAll('.btn-add-drill').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const bIdx = parseInt(e.currentTarget.getAttribute('data-bidx'), 10);
+                        day.blocks[bIdx].drills.push({
+                            id: `${day.id}-${bIdx}-${Date.now()}`,
+                            name: 'New Drill',
+                            reps: '20 reps',
+                            rest: '30s',
+                            notes: 'Focus on form and quick hands'
+                        });
+                        renderWorkout();
+                    });
+                });
+
+                document.querySelectorAll('.btn-delete-drill').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const bIdx = parseInt(e.currentTarget.getAttribute('data-bidx'), 10);
+                        const dIdx = parseInt(e.currentTarget.getAttribute('data-didx'), 10);
+                        day.blocks[bIdx].drills.splice(dIdx, 1);
+                        renderWorkout();
+                    });
+                });
+            }
+        }
+
+        // Countdown Timer Logic
+        function setTimer(seconds) {
+            pauseTimer();
+            timerInitialSeconds = seconds;
+            timerSecondsLeft = seconds;
+            updateTimerDisplay();
+        }
+
+        function startTimer() {
+            if (timerRunning) return;
+            if (timerSecondsLeft <= 0) timerSecondsLeft = timerInitialSeconds;
+            timerRunning = true;
+            document.getElementById('timer-status-dot').className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping';
+
+            timerInterval = setInterval(() => {
+                if (timerSecondsLeft <= 0) {
+                    pauseTimer();
+                    const disp = document.getElementById('timer-display');
+                    disp.textContent = '00:00';
+                    disp.className = 'text-3xl sm:text-4xl font-mono font-black tracking-tight text-emerald-400 mt-0.5';
+                    showToast('⏱ Timer Complete!');
+                    return;
+                }
+                timerSecondsLeft--;
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            timerRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('timer-status-dot').className = 'w-2 h-2 rounded-full bg-slate-600';
+        }
+
+        function updateTimerDisplay() {
+            const disp = document.getElementById('timer-display');
+            const mins = Math.floor(timerSecondsLeft / 60);
+            const secs = timerSecondsLeft % 60;
+            disp.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+            if (timerSecondsLeft > 0 && timerSecondsLeft <= 5) {
+                disp.className = 'text-3xl sm:text-4xl font-mono font-black tracking-tight text-red-400 animate-pulse mt-0.5';
+            } else if (timerSecondsLeft > 5 && timerSecondsLeft <= 10) {
+                disp.className = 'text-3xl sm:text-4xl font-mono font-black tracking-tight text-amber-400 mt-0.5';
+            } else {
+                disp.className = 'text-3xl sm:text-4xl font-mono font-black tracking-tight text-white mt-0.5';
+            }
+        }
+
+        // GitHub REST API Save (Creates or Updates plan-data.json in the repository)
+        async function commitPlanToGitHub() {
+            const { owner, repo, branch, path, token } = ghConfig;
+            if (!owner || !repo || !token) {
+                showToast('Configure GitHub Owner, Repo, and Token first.');
+                document.getElementById('modal-github').classList.remove('hidden');
+                return;
+            }
+
+            const saveBtn = document.getElementById('btn-save-github');
+            const origHtml = saveBtn.innerHTML;
+            saveBtn.textContent = 'Saving...';
+            saveBtn.disabled = true;
+
+            try {
+                const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+                // 1. Check if file exists to get current SHA
+                let sha = null;
+                const getRes = await fetch(`${apiUrl}?ref=${branch}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (getRes.ok) {
+                    const fileInfo = await getRes.json();
+                    sha = fileInfo.sha;
+                } else if (getRes.status !== 404) {
+                    throw new Error(`GitHub API Error (${getRes.status})`);
+                }
+
+                // 2. Encode updated JSON in UTF-8 safe Base64
+                const jsonStr = JSON.stringify(planData, null, 2);
+                const base64Content = btoa(unescape(encodeURIComponent(jsonStr)));
+
+                const bodyPayload = {
+                    message: `Update Mo's Attack Coaching Card (${new Date().toLocaleDateString()})`,
+                    content: base64Content,
+                    branch: branch
+                };
+                if (sha) bodyPayload.sha = sha;
+
+                // 3. PUT to GitHub
+                const putRes = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bodyPayload)
+                });
+
+                if (!putRes.ok) {
+                    const errData = await putRes.json();
+                    throw new Error(errData.message || 'Commit failed');
+                }
+
+                isEditMode = false;
+                document.getElementById('edit-btn-label').textContent = 'Edit Plan';
+                saveBtn.classList.add('hidden');
+                renderWorkout();
+                showToast('✅ Saved directly to GitHub! Live site updates in ~30s.');
+            } catch (err) {
+                console.error(err);
+                showToast(`❌ Save failed: ${err.message}`);
+            } finally {
+                saveBtn.innerHTML = origHtml;
+                saveBtn.disabled = false;
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3200);
+        }
+    </script>
+</body>
+</html>
